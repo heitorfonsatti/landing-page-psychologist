@@ -149,10 +149,13 @@ img {
   justify-content: center;
 }
 
-/* Esmaece o conteúdo, nunca o fundo: o texto não passa por cor fora da
-   tabela de contraste. */
+/* Esmaece o conteúdo, nunca o fundo. O esmaecimento tem piso: como a rolagem
+   é livre, a visitante pode parar com qualquer pedaço de uma parte à vista, e
+   esse texto precisa manter 4,5:1. Calculado para as combinações da paleta, o
+   par mais apertado (marrom sobre bege, 6,02:1) chega a 4,5:1 com opacidade
+   0,87 — daí o piso de 0,88. */
 .pilha-ativa [data-parte] > * {
-  opacity: calc(1 - var(--cobertura, 0) * 0.85);
+  opacity: calc(1 - 0.12 * var(--cobertura, 0));
 }
 
 /* Partes bege seguidas: um traço marca a emenda. */

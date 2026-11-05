@@ -68,11 +68,11 @@ test('a parte coberta esmaece', async ({ page }) => {
   expect(y).toBeGreaterThan(0);
   await page.evaluate((v) => window.scrollTo({ top: v, behavior: 'instant' }), y);
 
-  await expect
-    .poll(() =>
-      page.$eval('#servicos > *', (el) => Number(getComputedStyle(el).opacity)),
-    )
-    .toBeLessThan(0.5);
+  const opacidade = () =>
+    page.$eval('#servicos > *', (el) => Number(getComputedStyle(el).opacity));
+  // Esmaece de verdade, mas nunca abaixo do piso que mantém 4,5:1 (0,88).
+  await expect.poll(opacidade).toBeLessThan(0.95);
+  expect(await opacidade()).toBeGreaterThanOrEqual(0.88);
 });
 
 // Review Focus 1
@@ -178,4 +178,64 @@ test('nada fica inalcançável depois de girar a tela', async ({ page }) => {
   await page.waitForTimeout(150);
   expect(await ultimoTextoAlcancavel(page, '#sobre')).toBe(true);
   expect(await ultimoTextoAlcancavel(page, '#servicos')).toBe(true);
+});
+
+// Revisão final, Important 1
+test('clicar com o mouse numa pergunta parcialmente visível abre a resposta', async ({ page }) => {
+  const indice = await page.evaluate(() => {
+    const resumos = Array.from(document.querySelectorAll<HTMLElement>('#duvidas summary'));
+    const fim = document.documentElement.scrollHeight;
+    for (let y = 0; y <= fim; y += 10) {
+      window.scrollTo({ top: y, behavior: 'instant' });
+      for (const [i, s] of resumos.entries()) {
+        const r = s.getBoundingClientRect();
+        // metade de cima visível, metade de baixo fora da tela
+        if (r.top < window.innerHeight - 6 && r.bottom > window.innerHeight + 2) {
+          const no = document.elementFromPoint(r.left + 20, r.top + 3);
+          if (no && s.contains(no)) return i;
+        }
+      }
+    }
+    return -1;
+  });
+  expect(indice).toBeGreaterThanOrEqual(0);
+  const r = await page.locator('#duvidas summary').nth(indice).boundingBox();
+  await page.mouse.click(r!.x + 20, r!.y + 3);
+  await expect(page.locator('#duvidas details').nth(indice)).toHaveAttribute('open', '');
+});
+
+// Revisão final, Important 2
+test('depois de clicar numa âncora, o Tab seguinte entra na seção', async ({ page }) => {
+  await page.evaluate(() =>
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }),
+  );
+  await page.locator('header').getByRole('link', { name: 'Serviços', exact: true }).press('Enter');
+  await esperarScrollParar(page);
+  await expect(page.locator(':target')).toHaveAttribute('id', 'servicos');
+  await page.keyboard.press('Tab');
+  const dentro = await page.evaluate(
+    () => document.querySelector('#servicos')!.contains(document.activeElement) ||
+      document.querySelector('#servicos')!.compareDocumentPosition(document.activeElement!) &
+        Node.DOCUMENT_POSITION_FOLLOWING,
+  );
+  expect(Boolean(dentro)).toBe(true);
+});
+
+// Revisão final, Important 2
+test('hash mudado sem clique também mostra a seção descoberta', async ({ page }) => {
+  await page.evaluate(() =>
+    window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }),
+  );
+  await page.evaluate(() => {
+    window.location.hash = '#servicos';
+  });
+  await esperarScrollParar(page);
+  const r = await page.evaluate(() => {
+    const h2 = document.querySelector('#servicos h2')!.getBoundingClientRect();
+    const cab = document.querySelector('header')!.getBoundingClientRect().bottom;
+    const no = document.elementFromPoint(h2.left + h2.width / 2, h2.top + h2.height / 2);
+    return { dentro: Boolean(no && document.querySelector('#servicos')!.contains(no)), topo: h2.top, cab };
+  });
+  expect(r.dentro).toBe(true);
+  expect(r.topo).toBeGreaterThanOrEqual(r.cab - 2);
 });

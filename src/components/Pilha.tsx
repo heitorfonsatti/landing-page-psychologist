@@ -35,8 +35,11 @@ export function Pilha(): null {
 
     const alturaCabecalho = () => cabecalho?.offsetHeight ?? 0;
 
-    const medir = () => {
+    const medirCabecalho = () => {
       raiz.style.setProperty('--altura-cabecalho-medida', `${alturaCabecalho()}px`);
+    };
+
+    const medirPartes = () => {
       for (const parte of partes) {
         parte.style.setProperty('--altura-parte', `${parte.offsetHeight}px`);
       }
@@ -111,23 +114,22 @@ export function Pilha(): null {
       return true;
     };
 
-    const aoClicar = (evento: MouseEvent) => {
-      if (
-        evento.defaultPrevented ||
-        evento.button !== 0 ||
-        evento.metaKey ||
-        evento.ctrlKey ||
-        evento.shiftKey ||
-        evento.altKey
-      ) {
-        return;
-      }
-      const link = (evento.target as Element | null)?.closest?.('a[href^="#"]');
-      const id = link ? decodeURIComponent((link.getAttribute('href') ?? '').slice(1)) : '';
+    /* A navegação por âncora fica nativa — o navegador marca o alvo
+       (`:target`), põe o ponto de partida do Tab dentro da seção e cuida do
+       histórico. Depois dela, só a posição é corrigida. */
+    const corrigirAncora = () => {
+      const id = decodeURIComponent(window.location.hash.slice(1));
       const alvo = id ? document.getElementById(id) : null;
-      if (alvo && rolarPara(alvo, 'smooth')) {
-        evento.preventDefault();
-        window.history.pushState(null, '', `#${id}`);
+      if (alvo) {
+        rolarPara(alvo, 'smooth');
+      }
+    };
+
+    const aoClicar = (evento: MouseEvent) => {
+      const link = (evento.target as Element | null)?.closest?.('a[href^="#"]');
+      if (link && !evento.defaultPrevented) {
+        // Clicar de novo na mesma âncora não dispara `hashchange`.
+        window.requestAnimationFrame(corrigirAncora);
       }
     };
 
@@ -140,37 +142,58 @@ export function Pilha(): null {
       return Boolean(noPonto && (noPonto === el || el.contains(noPonto)));
     };
 
+    /* Só foco de teclado. Com o mouse o navegador foca no mousedown; rolar
+       ali tiraria o elemento de baixo do cursor e o clique se perderia.
+       Espera um quadro para deixar o navegador fazer a rolagem dele primeiro
+       e só corrige se, depois dela, o elemento ainda estiver escondido. */
     const aoFocar = (evento: FocusEvent) => {
       const el = evento.target;
-      if (el instanceof HTMLElement && !visivel(el)) {
-        rolarPara(el, 'instant');
+      if (!(el instanceof HTMLElement)) {
+        return;
       }
+      window.requestAnimationFrame(() => {
+        if (document.activeElement === el && el.matches(':focus-visible') && !visivel(el)) {
+          rolarPara(el, 'instant');
+        }
+      });
     };
 
-    const observador = new window.ResizeObserver(() => {
-      medir();
+    let ativa = false;
+
+    // Medir o cabeçalho não é movimento: vale também com a pilha desligada,
+    // para o conteúdo sempre começar abaixo da altura real dele.
+    const observadorCabecalho = new window.ResizeObserver(() => {
+      medirCabecalho();
+      if (ativa) {
+        agendarCobertura();
+      }
+    });
+
+    const observadorPartes = new window.ResizeObserver(() => {
+      medirPartes();
       agendarCobertura();
     });
 
     const ligar = () => {
-      medir();
+      ativa = true;
+      medirPartes();
       raiz.classList.add(CLASSE_PILHA);
-      if (cabecalho) {
-        observador.observe(cabecalho);
-      }
-      partes.forEach((parte) => observador.observe(parte));
+      partes.forEach((parte) => observadorPartes.observe(parte));
       window.addEventListener('scroll', agendarCobertura, { passive: true });
       window.addEventListener('resize', agendarCobertura);
+      window.addEventListener('hashchange', corrigirAncora);
       document.addEventListener('click', aoClicar);
       document.addEventListener('focusin', aoFocar);
       agendarCobertura();
     };
 
     const desligar = () => {
+      ativa = false;
       raiz.classList.remove(CLASSE_PILHA);
-      observador.disconnect();
+      observadorPartes.disconnect();
       window.removeEventListener('scroll', agendarCobertura);
       window.removeEventListener('resize', agendarCobertura);
+      window.removeEventListener('hashchange', corrigirAncora);
       document.removeEventListener('click', aoClicar);
       document.removeEventListener('focusin', aoFocar);
       if (quadro !== 0) {
@@ -188,6 +211,10 @@ export function Pilha(): null {
       }
     };
 
+    medirCabecalho();
+    if (cabecalho) {
+      observadorCabecalho.observe(cabecalho);
+    }
     if (!midia.matches) {
       ligar();
     }
@@ -196,6 +223,7 @@ export function Pilha(): null {
     return () => {
       midia.removeEventListener('change', aoMudarPreferencia);
       desligar();
+      observadorCabecalho.disconnect();
     };
   }, []);
 

@@ -6,7 +6,19 @@ type Ouvinte = (evento: { matches: boolean }) => void;
 
 let reduzido: boolean;
 let ouvintesMidia: Ouvinte[];
-let callbackObservador: ResizeObserverCallback | undefined;
+type Observador = { cb: ResizeObserverCallback; alvos: Set<Element> };
+let observadores: Observador[];
+
+/** Dispara, como o navegador, só os observadores que observam algo. */
+function dispararObservadores() {
+  for (const o of observadores) {
+    if (o.alvos.size > 0) {
+      o.cb([], {} as ResizeObserver);
+    }
+  }
+}
+
+const observado = (el: Element) => observadores.some((o) => o.alvos.has(el));
 
 function definirAltura(el: HTMLElement, altura: number) {
   Object.defineProperty(el, 'offsetHeight', { configurable: true, value: altura });
@@ -32,7 +44,7 @@ function mudarPreferencia(matches: boolean) {
 beforeEach(() => {
   reduzido = false;
   ouvintesMidia = [];
-  callbackObservador = undefined;
+  observadores = [];
   montarFixture();
 
   vi.stubGlobal(
@@ -52,12 +64,20 @@ beforeEach(() => {
   vi.stubGlobal(
     'ResizeObserver',
     class {
+      private o: Observador;
       constructor(callback: ResizeObserverCallback) {
-        callbackObservador = callback;
+        this.o = { cb: callback, alvos: new Set() };
+        observadores.push(this.o);
       }
-      observe() {}
-      unobserve() {}
-      disconnect() {}
+      observe(el: Element) {
+        this.o.alvos.add(el);
+      }
+      unobserve(el: Element) {
+        this.o.alvos.delete(el);
+      }
+      disconnect() {
+        this.o.alvos.clear();
+      }
     },
   );
 });
@@ -94,12 +114,32 @@ describe('Pilha', () => {
 
   it('escreve a altura de cada parte e do cabeçalho', () => {
     render(<Pilha />);
-    expect(callbackObservador).toBeDefined();
-    callbackObservador!([], {} as ResizeObserver);
+    dispararObservadores();
 
     expect(document.getElementById('p1')!.style.getPropertyValue('--altura-parte')).toBe('900px');
     expect(document.getElementById('p2')!.style.getPropertyValue('--altura-parte')).toBe('1400px');
     expect(html().style.getPropertyValue('--altura-cabecalho-medida')).toBe('113px');
+  });
+
+  // Revisão final: medir não é movimento. Quem pediu menos movimento também
+  // precisa que o conteúdo comece abaixo do cabeçalho real.
+  it('mede o cabeçalho mesmo com movimento reduzido', () => {
+    reduzido = true;
+    render(<Pilha />);
+    expect(html()).not.toHaveClass(CLASSE_PILHA);
+    expect(observado(document.getElementById('cabecalho')!)).toBe(true);
+    dispararObservadores();
+    expect(html().style.getPropertyValue('--altura-cabecalho-medida')).toBe('113px');
+  });
+
+  it('continua medindo o cabeçalho depois de desligar a pilha', () => {
+    render(<Pilha />);
+    mudarPreferencia(true);
+    expect(observado(document.getElementById('cabecalho')!)).toBe(true);
+    expect(observado(document.getElementById('p1')!)).toBe(false);
+    definirAltura(document.getElementById('cabecalho')!, 140);
+    dispararObservadores();
+    expect(html().style.getPropertyValue('--altura-cabecalho-medida')).toBe('140px');
   });
 
   it('remove a classe ao desmontar', () => {
