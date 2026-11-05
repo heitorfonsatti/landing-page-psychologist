@@ -1,0 +1,63 @@
+.abertura {
+  padding-block: var(--respiro-secao);
+}
+
+.interno {
+  display: grid;
+  gap: clamp(2.5rem, 6vw, 4rem);
+  align-items: center;
+}
+
+.texto {
+  min-width: 0;
+}
+
+.identificacao {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.375rem 0.875rem;
+  margin-bottom: 1.5rem;
+  font-size: 0.9375rem;
+  letter-spacing: 0.02em;
+}
+
+.nome {
+  font-weight: 600;
+}
+
+.profissao,
+.crp {
+  position: relative;
+  padding-left: 1.125rem;
+}
+
+/* Separadores decorativos: não entram na leitura. */
+.profissao::before,
+.crp::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 0.375rem;
+  height: 0.375rem;
+  border-radius: 50%;
+  background-color: var(--azul);
+}
+
+.modalidade {
+  max-width: 34ch;
+  font-size: 1.125rem;
+  margin-bottom: 2rem;
+}
+
+.retrato img {
+  width: 100%;
+  border-radius: var(--raio-grande);
+}
+
+@media (min-width: 48rem) {
+  .interno {
+    grid-template-columns: 1fr minmax(0, 0.85fr);
+  }
+}
