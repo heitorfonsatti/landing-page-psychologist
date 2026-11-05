@@ -1,0 +1,33 @@
+.botao {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  font-family: var(--fonte-texto);
+  font-size: 1rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-align: center;
+  text-decoration: none;
+  transition: background-color 180ms ease, color 180ms ease;
+}
+
+.primario {
+  background-color: var(--marrom);
+  color: var(--bege);
+}
+
+.primario:hover {
+  background-color: var(--marrom-escuro);
+}
+
+.claro {
+  background-color: var(--bege);
+  color: var(--marrom);
+}
+
+.claro:hover {
+  color: var(--marrom-escuro);
+}
