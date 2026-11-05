@@ -1,0 +1,55 @@
+/* Bege sobre marrom: 6,02:1. */
+.rodape {
+  background-color: var(--marrom);
+  color: var(--bege);
+  padding-block: clamp(3rem, 6vw, 4.5rem);
+}
+
+.interno {
+  display: grid;
+  gap: 1.5rem;
+  max-width: 60rem;
+}
+
+.identificacao {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.25rem 1.25rem;
+  font-size: 0.9375rem;
+}
+
+.nome {
+  font-family: var(--fonte-titulo);
+  font-size: 1.125rem;
+}
+
+.listaRedes {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.linkRede {
+  font-size: 0.9375rem;
+  text-decoration: underline;
+  text-underline-offset: 0.25em;
+}
+
+.emergencia {
+  margin: 0;
+  padding: 1rem 1.25rem;
+  border: 1px solid rgb(242 239 226 / 0.35);
+  border-radius: var(--raio);
+  font-size: 0.9375rem;
+  max-width: 60ch;
+}
+
+.privacidade {
+  margin: 0;
+  font-size: 0.875rem;
+  opacity: 0.9;
+  max-width: 62ch;
+}

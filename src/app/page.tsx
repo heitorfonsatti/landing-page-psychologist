@@ -1,6 +1,8 @@
-import { Faq } from '@/components/Faq';
-import { Header } from '@/components/Header';
 import { About } from '@/components/About';
+import { Faq } from '@/components/Faq';
+import { FinalCta } from '@/components/FinalCta';
+import { Footer } from '@/components/Footer';
+import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { HowItWorks } from '@/components/HowItWorks';
 import { Services } from '@/components/Services';
@@ -16,7 +18,9 @@ export default function Home() {
         <About />
         <HowItWorks />
         <Faq />
+        <FinalCta />
       </main>
+      <Footer />
     </>
   );
 }
