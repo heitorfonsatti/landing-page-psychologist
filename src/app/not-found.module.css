@@ -1,0 +1,35 @@
+.pagina {
+  display: flex;
+  align-items: center;
+  min-height: 100vh;
+  padding-block: var(--respiro-secao);
+}
+
+.codigo {
+  margin-bottom: 0.5rem;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(3rem, 8vw, 5rem);
+  line-height: 1;
+  color: var(--azul);
+}
+
+.texto {
+  max-width: 40ch;
+  margin-bottom: 2rem;
+}
+
+.voltar {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.75rem 1.5rem;
+  border-radius: 999px;
+  background-color: var(--marrom);
+  color: var(--bege);
+  font-weight: 600;
+  text-decoration: none;
+  transition: background-color 180ms ease;
+}
+
+.voltar:hover {
+  background-color: var(--marrom-escuro);
+}
