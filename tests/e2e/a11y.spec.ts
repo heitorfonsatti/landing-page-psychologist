@@ -23,7 +23,13 @@ test('sem violações com cada dúvida aberta, uma por vez', async ({ page }) =>
     await expect(page.locator('details[open]')).toHaveCount(1);
     await expect(page.locator('details').nth(i)).toHaveAttribute('open', '');
 
-    const { violations } = await new AxeBuilder({ page }).withTags(TAGS_WCAG).analyze();
+    // Só a parte das Dúvidas: com a pilha, as partes de cima estão inteiras
+    // cobertas e esmaecidas atrás dela — texto que ninguém vê. A página
+    // inteira é verificada em repouso no primeiro teste.
+    const { violations } = await new AxeBuilder({ page })
+      .include('#duvidas')
+      .withTags(TAGS_WCAG)
+      .analyze();
     expect(violations).toEqual([]);
   }
 });

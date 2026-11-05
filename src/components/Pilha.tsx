@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect } from 'react';
-import { cobertura } from '@/lib/pilha';
+import { cobertura, rolagemParaMostrar } from '@/lib/pilha';
 
 /** Classe no `<html>` que liga o CSS da pilha em `globals.css`. */
 export const CLASSE_PILHA = 'pilha-ativa';
@@ -69,6 +69,84 @@ export function Pilha(): null {
       }
     };
 
+    /* -------- âncoras e foco --------
+       O navegador rola até a posição atual de uma parte grudada, que já está
+       na tela — só que coberta —, e conclui que não precisa rolar. Aqui a
+       rolagem é calculada a partir da posição natural da parte. */
+
+    const principal = partes[0]?.parentElement ?? null;
+
+    const topoNaturalDe = (indice: number): number => {
+      if (!principal) {
+        return 0;
+      }
+      let topo =
+        principal.getBoundingClientRect().top +
+        window.scrollY +
+        parseFloat(window.getComputedStyle(principal).paddingTop);
+      for (let k = 0; k < indice; k++) {
+        topo += partes[k]?.offsetHeight ?? 0;
+      }
+      return topo;
+    };
+
+    const rolarPara = (alvo: HTMLElement, comportamento: ScrollBehavior): boolean => {
+      const parte = alvo.closest<HTMLElement>(SELETOR_PARTE);
+      const indice = parte ? partes.indexOf(parte) : -1;
+      if (!parte || indice < 0) {
+        return false;
+      }
+      const deslocamento =
+        alvo === parte ? 0 : alvo.getBoundingClientRect().top - parte.getBoundingClientRect().top;
+      window.scrollTo({
+        top: rolagemParaMostrar({
+          topoNatural: topoNaturalDe(indice),
+          alturaParte: parte.offsetHeight,
+          deslocamento,
+          alturaTela: window.innerHeight,
+          topo: alturaCabecalho(),
+        }),
+        behavior: comportamento,
+      });
+      return true;
+    };
+
+    const aoClicar = (evento: MouseEvent) => {
+      if (
+        evento.defaultPrevented ||
+        evento.button !== 0 ||
+        evento.metaKey ||
+        evento.ctrlKey ||
+        evento.shiftKey ||
+        evento.altKey
+      ) {
+        return;
+      }
+      const link = (evento.target as Element | null)?.closest?.('a[href^="#"]');
+      const id = link ? decodeURIComponent((link.getAttribute('href') ?? '').slice(1)) : '';
+      const alvo = id ? document.getElementById(id) : null;
+      if (alvo && rolarPara(alvo, 'smooth')) {
+        evento.preventDefault();
+        window.history.pushState(null, '', `#${id}`);
+      }
+    };
+
+    const visivel = (el: HTMLElement): boolean => {
+      const r = el.getBoundingClientRect();
+      if (r.top < alturaCabecalho() - 1 || r.bottom > window.innerHeight + 1) {
+        return false;
+      }
+      const noPonto = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+      return Boolean(noPonto && (noPonto === el || el.contains(noPonto)));
+    };
+
+    const aoFocar = (evento: FocusEvent) => {
+      const el = evento.target;
+      if (el instanceof HTMLElement && !visivel(el)) {
+        rolarPara(el, 'instant');
+      }
+    };
+
     const observador = new window.ResizeObserver(() => {
       medir();
       agendarCobertura();
@@ -83,6 +161,8 @@ export function Pilha(): null {
       partes.forEach((parte) => observador.observe(parte));
       window.addEventListener('scroll', agendarCobertura, { passive: true });
       window.addEventListener('resize', agendarCobertura);
+      document.addEventListener('click', aoClicar);
+      document.addEventListener('focusin', aoFocar);
       agendarCobertura();
     };
 
@@ -91,6 +171,8 @@ export function Pilha(): null {
       observador.disconnect();
       window.removeEventListener('scroll', agendarCobertura);
       window.removeEventListener('resize', agendarCobertura);
+      document.removeEventListener('click', aoClicar);
+      document.removeEventListener('focusin', aoFocar);
       if (quadro !== 0) {
         window.cancelAnimationFrame(quadro);
         quadro = 0;

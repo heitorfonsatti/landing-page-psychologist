@@ -17,6 +17,10 @@
   /* No celular o cabeçalho tem duas linhas; no computador, uma. */
   --altura-cabecalho: 7rem;
 
+  /* Onde o conteúdo começa abaixo do cabeçalho fixo. Usa a altura medida
+     pelo componente Pilha quando há JavaScript, e a constante quando não há. */
+  --topo-pilha: var(--altura-cabecalho-medida, var(--altura-cabecalho));
+
   --respiro-secao: clamp(4rem, 9vw, 7.5rem);
   --largura-maxima: 72rem;
   --raio: 1.25rem;
@@ -37,6 +41,8 @@
 
 html {
   scroll-behavior: smooth;
+  /* Foco do teclado e âncoras nunca param sob o cabeçalho fixo. */
+  scroll-padding-top: var(--topo-pilha);
   -webkit-text-size-adjust: 100%;
 }
 
@@ -95,7 +101,7 @@ img {
 
 /* Âncoras do cabeçalho: o título não pode ficar sob o cabeçalho fixo. */
 .secao {
-  scroll-margin-top: var(--altura-cabecalho);
+  scroll-margin-top: var(--topo-pilha);
   padding-block: var(--respiro-secao);
 }
 
@@ -116,6 +122,42 @@ img {
   clip-path: inset(50%);
   white-space: nowrap;
   border: 0;
+}
+
+/* ---------------------------------------------------------------
+   Pilha de partes inteiras (emenda de seções e transições).
+   Só vale com a classe pilha-ativa, que o componente Pilha liga quando há
+   JavaScript e a visitante não pediu movimento reduzido. Sem ela, a página
+   rola como sempre rolou.
+   --------------------------------------------------------------- */
+
+/* Partes sem fundo próprio precisam ser opacas para cobrir a anterior. */
+:where([data-parte]) {
+  background-color: var(--bege);
+}
+
+.pilha-ativa [data-parte] {
+  /* Parte que cabe: gruda logo abaixo do cabeçalho. Parte mais alta que a
+     tela: rola até mostrar o fim e gruda pelo pé. */
+  position: sticky;
+  top: min(var(--topo-pilha), calc(100svh - var(--altura-parte, 100svh)));
+  min-height: calc(100svh - var(--topo-pilha));
+  /* A tela inteira já é o respiro. */
+  padding-block: clamp(2rem, 5vh, 3.5rem);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+/* Esmaece o conteúdo, nunca o fundo: o texto não passa por cor fora da
+   tabela de contraste. */
+.pilha-ativa [data-parte] > * {
+  opacity: calc(1 - var(--cobertura, 0) * 0.85);
+}
+
+/* Partes bege seguidas: um traço marca a emenda. */
+.pilha-ativa [data-parte][data-cor="bege"] + [data-parte][data-cor="bege"] {
+  border-top: 1px solid color-mix(in srgb, var(--marrom) 15%, transparent);
 }
 
 @media (prefers-reduced-motion: reduce) {

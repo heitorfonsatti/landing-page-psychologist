@@ -16,7 +16,7 @@ describe('globals.css', () => {
   });
 
   it('aplica scroll-margin-top nas seções', () => {
-    expect(css).toMatch(/scroll-margin-top:\s*var\(--altura-cabecalho\)/);
+    expect(css).toMatch(/scroll-margin-top:\s*var\(--topo-pilha\)/);
   });
 
   // Review Focus 5

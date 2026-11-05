@@ -15,7 +15,7 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
 
-  // Os dois tamanhos exigidos pela spec, só em Chromium.
+  // Os tamanhos da spec, mais os dois notebooks mais comuns (emenda de seções), só em Chromium.
   projects: [
     {
       name: 'celular',
@@ -24,6 +24,14 @@ export default defineConfig({
     {
       name: 'computador',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
+    },
+    {
+      name: 'notebook',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 768 } },
+    },
+    {
+      name: 'notebook-pequeno',
+      use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 720 } },
     },
   ],
 
