@@ -1,0 +1,7 @@
+# O nome precisa ser igual ao do projeto criado no Cloudflare Pages.
+name = "landing-psicologa"
+
+# O diretório que o `next build` gera com `output: 'export'`.
+# Por estar aqui, o `wrangler pages deploy` não recebe o diretório na linha de
+# comando — passar os dois é erro.
+pages_build_output_dir = "out"
