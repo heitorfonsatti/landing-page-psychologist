@@ -36,4 +36,10 @@ describe('Faq', () => {
     expect(valores.answer).not.toMatch(/R\$/i);
     expect(screen.getByText(valores.answer)).toBeInTheDocument();
   });
+  it('agrupa as perguntas num acordeão exclusivo', () => {
+    const { container } = render(<Faq />);
+    const nomes = [...container.querySelectorAll('details')].map((d) => d.getAttribute('name'));
+    expect(nomes).toHaveLength(siteContent.faq.items.length);
+    expect(new Set(nomes)).toEqual(new Set(['duvidas']));
+  });
 });

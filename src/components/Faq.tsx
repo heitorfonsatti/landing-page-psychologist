@@ -13,7 +13,7 @@ export function Faq() {
             acessível pelo teclado. */}
         <div className={styles.lista}>
           {items.map((item) => (
-            <details key={item.question} className={styles.item}>
+            <details key={item.question} name="duvidas" className={styles.item}>
               <summary className={styles.pergunta}>{item.question}</summary>
               <p className={styles.resposta}>{item.answer}</p>
             </details>

@@ -9,19 +9,23 @@ test('sem violações WCAG A e AA', async ({ page }) => {
   expect(violations).toEqual([]);
 });
 
-// Review Focus 4: com as dúvidas fechadas, as respostas nunca passariam
-// por contraste nem por estrutura.
-test('sem violações com todas as dúvidas abertas', async ({ page }) => {
+// Review Focus 4: as respostas precisam passar por contraste e estrutura.
+// Com o acordeão exclusivo só uma fica aberta por vez, então cada uma é
+// aberta e verificada separadamente.
+test('sem violações com cada dúvida aberta, uma por vez', async ({ page }) => {
   await page.goto('/');
-  await page.$$eval('details', (lista) => {
-    for (const detalhe of lista) {
-      detalhe.setAttribute('open', '');
-    }
-  });
-  await expect(page.locator('details[open]')).not.toHaveCount(0);
+  const resumos = page.locator('#duvidas summary');
+  const total = await resumos.count();
+  expect(total).toBeGreaterThan(0);
 
-  const { violations } = await new AxeBuilder({ page }).withTags(TAGS_WCAG).analyze();
-  expect(violations).toEqual([]);
+  for (let i = 0; i < total; i++) {
+    await resumos.nth(i).click();
+    await expect(page.locator('details[open]')).toHaveCount(1);
+    await expect(page.locator('details').nth(i)).toHaveAttribute('open', '');
+
+    const { violations } = await new AxeBuilder({ page }).withTags(TAGS_WCAG).analyze();
+    expect(violations).toEqual([]);
+  }
 });
 
 test('a página 404 não tem violações WCAG A e AA', async ({ page }) => {
