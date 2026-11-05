@@ -53,3 +53,4 @@ next-env.d.ts
 # superpowers (spec, plano e area de trabalho ficam fora do versionamento)
 docs/superpowers/
 .superpowers/
+docs/publicacao.md
