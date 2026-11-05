@@ -1,3 +1,4 @@
+import { fileURLToPath } from 'node:url';
 import react from '@vitejs/plugin-react';
 import { defineConfig } from 'vitest/config';
 
@@ -5,6 +6,12 @@ export default defineConfig({
   plugins: [react()],
   resolve: {
     tsconfigPaths: true,
+    alias: {
+      // `next/font/google` só existe dentro do bundler do Next.
+      'next/font/google': fileURLToPath(
+        new URL('./tests/mocks/next-font-google.ts', import.meta.url),
+      ),
+    },
   },
   test: {
     environment: 'jsdom',
