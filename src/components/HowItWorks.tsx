@@ -5,7 +5,7 @@ export function HowItWorks() {
   const { title, steps } = siteContent.howItWorks;
 
   return (
-    <section className={`${styles.comoFunciona} secao`}>
+    <section className={`${styles.comoFunciona} secao`} data-parte data-cor="bege">
       <div className="conteudo">
         <h2>{title}</h2>
 

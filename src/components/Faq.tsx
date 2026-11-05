@@ -5,7 +5,7 @@ export function Faq() {
   const { title, items } = siteContent.faq;
 
   return (
-    <section id="duvidas" className={`${styles.duvidas} secao`}>
+    <section id="duvidas" className={`${styles.duvidas} secao`} data-parte data-cor="bege">
       <div className={`${styles.interno} conteudo`}>
         <h2>{title}</h2>
 

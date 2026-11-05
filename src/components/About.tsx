@@ -6,7 +6,7 @@ export function About() {
   const { title, paragraphs, education, approach, photo } = siteContent.about;
 
   return (
-    <section id="sobre" className={`${styles.sobre} secao`}>
+    <section id="sobre" className={`${styles.sobre} secao`} data-parte data-cor="bege">
       <div className={`${styles.interno} conteudo`}>
         <div className={styles.foto}>
           <Image

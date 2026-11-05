@@ -7,7 +7,7 @@ export function Hero() {
   const { fullName, profession, crp, hero } = siteContent;
 
   return (
-    <section className={styles.abertura}>
+    <section className={styles.abertura} data-parte data-cor="bege">
       <div className={`${styles.interno} conteudo`}>
         <div className={styles.texto}>
           <p className={styles.identificacao}>

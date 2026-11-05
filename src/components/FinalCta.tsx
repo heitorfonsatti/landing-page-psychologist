@@ -4,7 +4,7 @@ import styles from './FinalCta.module.css';
 
 export function FinalCta() {
   return (
-    <section className={`${styles.chamada} secao`}>
+    <section className={`${styles.chamada} secao`} data-parte data-cor="azul-escuro">
       <div className={`${styles.interno} conteudo`}>
         <h2 className={styles.frase}>{siteContent.finalCta.headline}</h2>
         <WhatsAppButton variant="claro" />
