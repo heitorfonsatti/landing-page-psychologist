@@ -1,0 +1,83 @@
+.cabecalho {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 10;
+  min-height: var(--altura-cabecalho);
+  background-color: var(--bege);
+  border-bottom: 1px solid rgb(120 81 53 / 0.12);
+}
+
+/* Celular: nome e botão na primeira linha, links na segunda. */
+.interno {
+  display: grid;
+  grid-template-areas:
+    "nome botao"
+    "nav  nav";
+  grid-template-columns: 1fr auto;
+  align-items: center;
+  gap: 0.5rem 1rem;
+  min-height: var(--altura-cabecalho);
+  padding-block: 0.75rem;
+}
+
+.nome {
+  grid-area: nome;
+  font-family: var(--fonte-titulo);
+  font-size: clamp(1.0625rem, 4vw, 1.25rem);
+  font-weight: 500;
+  line-height: 1.2;
+  text-decoration: none;
+  color: var(--marrom);
+}
+
+.botao {
+  grid-area: botao;
+  padding: 0.5rem 1.125rem;
+  font-size: 0.9375rem;
+}
+
+.navegacao {
+  grid-area: nav;
+}
+
+.lista {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.25rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+
+.link {
+  font-size: 0.9375rem;
+  text-decoration: none;
+  color: var(--marrom);
+  text-underline-offset: 0.25em;
+  transition: text-decoration-color 180ms ease;
+  text-decoration: underline;
+  text-decoration-color: transparent;
+}
+
+.link:hover {
+  text-decoration-color: currentColor;
+}
+
+/* Computador: tudo em uma linha. */
+@media (min-width: 48rem) {
+  .interno {
+    grid-template-areas: "nome nav botao";
+    grid-template-columns: 1fr auto auto;
+    gap: 2rem;
+    padding-block: 0;
+  }
+
+  .lista {
+    gap: 2rem;
+  }
+
+  .botao {
+    padding: 0.625rem 1.375rem;
+  }
+}

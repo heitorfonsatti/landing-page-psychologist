@@ -1,0 +1,4 @@
+/* Reserva o espaço do cabeçalho fixo. */
+.principal {
+  padding-top: var(--altura-cabecalho);
+}
