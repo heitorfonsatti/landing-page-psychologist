@@ -21,7 +21,18 @@ const validContent: SiteContent = {
   },
   services: {
     title: 'Como posso ajudar',
-    items: [{ title: 'Ansiedade', description: 'Quando a cabeça não desacelera.' }],
+    moreLabel: 'Saber mais',
+    backLabel: 'Voltar',
+    struggleLabel: 'O que você pode estar vivendo',
+    supportLabel: 'Como a terapia pode ajudar',
+    items: [
+      {
+        title: 'Ansiedade',
+        description: 'Quando a cabeça não desacelera.',
+        struggle: 'A preocupação ocupa muito espaço.',
+        support: 'Na terapia, treinamos novas respostas.',
+      },
+    ],
   },
   about: {
     title: 'Sobre mim',

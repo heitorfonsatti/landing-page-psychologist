@@ -9,6 +9,63 @@ export const STACK_CLASS = 'stack-active';
 const PANEL_SELECTOR = '[data-panel]';
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
+const headerBottom = (): number => document.querySelector('header')?.offsetHeight ?? 0;
+
+/* -------- anchors and focus --------
+   The browser scrolls to the current position of a stuck panel, which is
+   already on screen (just covered), and concludes there is nothing to
+   scroll. Here the scroll is computed from the panel's natural position. */
+
+function naturalTopOf(panels: HTMLElement[], index: number): number {
+  const main = panels[0]?.parentElement;
+  if (!main) {
+    return 0;
+  }
+  let top =
+    main.getBoundingClientRect().top + window.scrollY + parseFloat(window.getComputedStyle(main).paddingTop);
+  for (let k = 0; k < index; k++) {
+    top += panels[k]?.offsetHeight ?? 0;
+  }
+  return top;
+}
+
+/**
+ * Scrolls so that `target` shows, with its panel uncovered.
+ *
+ * @returns false, without scrolling, when `target` is not inside a panel.
+ */
+export function scrollToShow(target: HTMLElement, behavior: ScrollBehavior): boolean {
+  const panels = Array.from(document.querySelectorAll<HTMLElement>(PANEL_SELECTOR));
+  const panel = target.closest<HTMLElement>(PANEL_SELECTOR);
+  const index = panel ? panels.indexOf(panel) : -1;
+  if (!panel || index < 0) {
+    return false;
+  }
+  const offset =
+    target === panel ? 0 : target.getBoundingClientRect().top - panel.getBoundingClientRect().top;
+  window.scrollTo({
+    top: scrollTopToShow({
+      naturalTop: naturalTopOf(panels, index),
+      panelHeight: panel.offsetHeight,
+      offset,
+      viewportHeight: window.innerHeight,
+      stickTop: headerBottom(),
+    }),
+    behavior,
+  });
+  return true;
+}
+
+/** Whether `el` is entirely on screen, below the header and not covered. */
+export function isFullyVisible(el: HTMLElement): boolean {
+  const r = el.getBoundingClientRect();
+  if (r.top < headerBottom() - 1 || r.bottom > window.innerHeight + 1) {
+    return false;
+  }
+  const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
+  return Boolean(hit && (hit === el || el.contains(hit)));
+}
+
 /**
  * Turns on the stack of full-screen panels: each panel sticks and is covered
  * by the next one.
@@ -74,48 +131,6 @@ export function PanelStack(): null {
       }
     };
 
-    /* -------- anchors and focus --------
-       The browser scrolls to the current position of a stuck panel, which is
-       already on screen (just covered), and concludes there is nothing to
-       scroll. Here the scroll is computed from the panel's natural position. */
-
-    const main = panels[0]?.parentElement ?? null;
-
-    const naturalTopOf = (index: number): number => {
-      if (!main) {
-        return 0;
-      }
-      let top =
-        main.getBoundingClientRect().top +
-        window.scrollY +
-        parseFloat(window.getComputedStyle(main).paddingTop);
-      for (let k = 0; k < index; k++) {
-        top += panels[k]?.offsetHeight ?? 0;
-      }
-      return top;
-    };
-
-    const scrollToTarget = (target: HTMLElement, behavior: ScrollBehavior): boolean => {
-      const panel = target.closest<HTMLElement>(PANEL_SELECTOR);
-      const index = panel ? panels.indexOf(panel) : -1;
-      if (!panel || index < 0) {
-        return false;
-      }
-      const offset =
-        target === panel ? 0 : target.getBoundingClientRect().top - panel.getBoundingClientRect().top;
-      window.scrollTo({
-        top: scrollTopToShow({
-          naturalTop: naturalTopOf(index),
-          panelHeight: panel.offsetHeight,
-          offset,
-          viewportHeight: window.innerHeight,
-          stickTop: headerHeight(),
-        }),
-        behavior,
-      });
-      return true;
-    };
-
     /* Anchor navigation stays native: the browser marks the target
        (`:target`), moves the Tab starting point into the section and handles
        history. Afterwards, only the position is corrected. */
@@ -123,7 +138,7 @@ export function PanelStack(): null {
       const id = decodeURIComponent(window.location.hash.slice(1));
       const target = id ? document.getElementById(id) : null;
       if (target) {
-        scrollToTarget(target, 'smooth');
+        scrollToShow(target, 'smooth');
       }
     };
 
@@ -133,15 +148,6 @@ export function PanelStack(): null {
         // Clicking the same anchor again does not fire `hashchange`.
         window.requestAnimationFrame(fixAnchor);
       }
-    };
-
-    const isVisible = (el: HTMLElement): boolean => {
-      const r = el.getBoundingClientRect();
-      if (r.top < headerHeight() - 1 || r.bottom > window.innerHeight + 1) {
-        return false;
-      }
-      const hit = document.elementFromPoint(r.left + r.width / 2, r.top + r.height / 2);
-      return Boolean(hit && (hit === el || el.contains(hit)));
     };
 
     /* Keyboard focus only. With the mouse the browser focuses on mousedown;
@@ -154,8 +160,8 @@ export function PanelStack(): null {
         return;
       }
       window.requestAnimationFrame(() => {
-        if (document.activeElement === el && el.matches(':focus-visible') && !isVisible(el)) {
-          scrollToTarget(el, 'instant');
+        if (document.activeElement === el && el.matches(':focus-visible') && !isFullyVisible(el)) {
+          scrollToShow(el, 'instant');
         }
       });
     };

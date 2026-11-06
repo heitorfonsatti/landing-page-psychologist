@@ -36,3 +36,12 @@ describe('siteContent', () => {
     expect(notice).toContain('whatsapp');
   });
 });
+
+describe('siteContent.services', () => {
+  it('has a full explanation, problem and support, for every topic', () => {
+    for (const item of siteContent.services.items) {
+      expect(item.struggle.trim()).not.toBe('');
+      expect(item.support.trim()).not.toBe('');
+    }
+  });
+});
