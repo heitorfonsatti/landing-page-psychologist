@@ -16,7 +16,11 @@ export function Faq() {
           {items.map((item) => (
             <details key={item.question} name="faq" className={styles.item}>
               <summary className={styles.question}>{item.question}</summary>
-              <p className={styles.answer}>{item.answer}</p>
+              {/* Wrapper is the clipped grid item that the slide animation
+                  shrinks to zero height (see Faq.module.css). */}
+              <div className={styles.answerClip}>
+                <p className={styles.answer}>{item.answer}</p>
+              </div>
             </details>
           ))}
         </div>

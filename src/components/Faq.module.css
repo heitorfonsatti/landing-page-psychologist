@@ -54,3 +54,32 @@
   margin: 0.875rem 0 0;
   max-width: 62ch;
 }
+
+/* Slide open/close: the details content box is a one-row grid whose row
+   transitions between 0fr and 1fr, so the answer unrolls like a scroll.
+   content-visibility is transitioned as a discrete property so the closing
+   animation plays before the browser hides the content. Browsers without
+   ::details-content simply open and close instantly. */
+.item::details-content {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 450ms ease,
+    content-visibility 450ms allow-discrete;
+}
+
+.item[open]::details-content {
+  grid-template-rows: 1fr;
+}
+
+.answerClip {
+  min-height: 0;
+  overflow: hidden;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .item::details-content,
+  .question::after {
+    transition: none;
+  }
+}
