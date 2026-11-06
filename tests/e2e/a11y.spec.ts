@@ -4,13 +4,11 @@ import { expect, test, type Page } from '@playwright/test';
 const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
 /**
- * Axe over the whole page, except elements that are entirely behind the next
- * panel: text nobody can see. Any element with some slice in view stays in
- * the analysis and must have enough contrast.
- *
- * The criterion is per element, not per panel coverage: content is centered,
- * so a panel that is 88% covered may show no text at all, and a panel with
- * tall content may show text even when heavily covered.
+ * Axe over the whole page, except two kinds of elements:
+ * - elements entirely behind the next panel: text nobody can see;
+ * - everything in a panel that is being covered (--coverage > 0). That panel
+ *   is in transition and fades up to 55% by design, so its contrast drops
+ *   below 4.5:1 on purpose. The covering panel and panels at rest are checked.
  */
 async function axeWithoutCoveredText(page: Page) {
   await page.$$eval('main > [data-panel]', (panels) => {
@@ -23,10 +21,11 @@ async function axeWithoutCoveredText(page: Page) {
       // top of the next panel; whatever falls outside it is hidden.
       const nextTop = next.getBoundingClientRect().top;
       const headerBottom = document.querySelector('header')!.getBoundingClientRect().bottom;
+      const fading = Number(panel.style.getPropertyValue('--coverage') || 0) > 0;
       for (const el of Array.from(panel.querySelectorAll<HTMLElement>('*'))) {
         const r = el.getBoundingClientRect();
         const inView = Math.min(r.bottom, nextTop) - Math.max(r.top, headerBottom);
-        el.toggleAttribute('data-axe-covered', r.height > 0 && inView <= 0);
+        el.toggleAttribute('data-axe-covered', fading || (r.height > 0 && inView <= 0));
       }
     });
   });
@@ -62,10 +61,10 @@ test('no violations with each FAQ answer open, one at a time', async ({ page }) 
   }
 });
 
-// Final review, Important 3: scrolling is free, so the visitor can stop with
-// the next panel covering half the screen. The text still showing from the
-// panel above must keep its contrast.
-test('no violations with scrolling stopped mid-coverage', async ({ page }) => {
+// Scrolling is free, so the visitor can stop with the next panel covering half
+// the screen. The panel above is fading (excluded); the covering panel must
+// still pass.
+test('the covering panel has no violations with scrolling stopped mid-coverage', async ({ page }) => {
   await page.goto('/');
   await expect(page.locator('html')).toHaveClass(/stack-active/);
 
@@ -92,6 +91,10 @@ test('no violations with scrolling stopped mid-coverage', async ({ page }) => {
 
   const { violations } = await axeWithoutCoveredText(page);
   expect(violations).toEqual([]);
+  // Review Focus 5: the covering panel was really analyzed, not excluded.
+  expect(await page.locator('#sobre [data-axe-covered]').count()).toBeLessThan(
+    await page.locator('#sobre *').count(),
+  );
 });
 
 test('the 404 page has no WCAG A and AA violations', async ({ page }) => {

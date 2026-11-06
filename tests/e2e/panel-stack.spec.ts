@@ -65,9 +65,10 @@ test('the covered panel fades', async ({ page }) => {
 
   const opacity = () =>
     page.$eval('#servicos > *', (el) => Number(getComputedStyle(el).opacity));
-  // It really fades, but never below the floor that keeps 4.5:1 (0.88).
-  await expect.poll(opacity).toBeLessThan(0.95);
-  expect(await opacity()).toBeGreaterThanOrEqual(0.88);
+  // A strong, visible fade (up to 55%), but the text never vanishes: the floor
+  // is opacity 0.45. Contrast is not guaranteed while a panel is being covered.
+  await expect.poll(opacity).toBeLessThan(0.6);
+  expect(await opacity()).toBeGreaterThanOrEqual(0.449);
 });
 
 // Review Focus 1

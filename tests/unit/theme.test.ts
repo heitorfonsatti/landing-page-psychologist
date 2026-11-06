@@ -12,6 +12,14 @@ describe('globals.css', () => {
     expect(css).toMatch(new RegExp(`${name}:\\s*${value}\\s*;`, 'i'));
   });
 
+  it('defines --fade-max as 0.55', () => {
+    expect(css).toMatch(/--fade-max:\s*0\.55\s*;/);
+  });
+
+  it('fades covered content by --fade-max times the coverage', () => {
+    expect(css).toMatch(/opacity:\s*calc\(1 - var\(--fade-max\) \* var\(--coverage, 0\)\)/);
+  });
+
   it.each(['--blue', '--green', '--dark-blue'])('no longer defines %s', (name) => {
     expect(css).not.toMatch(new RegExp(`${name}:`));
   });
