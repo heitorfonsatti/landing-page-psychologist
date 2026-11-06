@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { siteContent } from '@/content/site';
 import type { SocialLink } from '@/types/content';
 import styles from './Footer.module.css';
@@ -13,6 +14,8 @@ export function Footer({ socialLinks = siteContent.socialLinks }: Props) {
   return (
     <footer className={styles.footer} data-color="beige">
       <div className={`${styles.inner} container`}>
+        <Image className={styles.logo} src="/images/logo.png" alt="" width={240} height={215} />
+
         <div className={styles.identity}>
           <span className={styles.name}>{fullName}</span>
           <span>{profession}</span>

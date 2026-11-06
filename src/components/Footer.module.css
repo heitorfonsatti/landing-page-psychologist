@@ -8,6 +8,11 @@
   max-width: 60rem;
 }
 
+.logo {
+  width: auto;
+  height: 3.5rem;
+}
+
 .identity {
   display: flex;
   flex-wrap: wrap;
