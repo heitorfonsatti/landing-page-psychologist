@@ -5,6 +5,6 @@ const pkg = JSON.parse(readFileSync('package.json', 'utf8')) as {
   dependencies: Record<string, string>;
 };
 
-it('não ganha dependência nova de runtime', () => {
+it('does not gain a new runtime dependency', () => {
   expect(Object.keys(pkg.dependencies).sort()).toEqual(['next', 'react', 'react-dom']);
 });

@@ -3,7 +3,7 @@ import type { SocialLink } from '@/types/content';
 import styles from './Footer.module.css';
 
 type Props = {
-  /** Existe só para o caso de não haver rede alguma: o bloco então não é renderizado. */
+  /** Only exists for the case of no social network at all: the block is then not rendered. */
   socialLinks?: SocialLink[];
 };
 
@@ -11,27 +11,27 @@ export function Footer({ socialLinks = siteContent.socialLinks }: Props) {
   const { fullName, profession, crp, footer } = siteContent;
 
   return (
-    <footer className={styles.rodape}>
-      <div className={`${styles.interno} conteudo`}>
-        <div className={styles.identificacao}>
-          <span className={styles.nome}>{fullName}</span>
+    <footer className={styles.footer}>
+      <div className={`${styles.inner} container`}>
+        <div className={styles.identity}>
+          <span className={styles.name}>{fullName}</span>
           <span>{profession}</span>
           <span>{`CRP ${crp}`}</span>
         </div>
 
         {socialLinks.length > 0 && (
-          <div className={styles.redes}>
-            <h2 className="visualmente-oculto">Redes sociais</h2>
-            <ul className={styles.listaRedes}>
-              {socialLinks.map((rede) => (
-                <li key={rede.url}>
+          <div>
+            <h2 className="visually-hidden">Redes sociais</h2>
+            <ul className={styles.socialList}>
+              {socialLinks.map((link) => (
+                <li key={link.url}>
                   <a
-                    className={styles.linkRede}
-                    href={rede.url}
+                    className={styles.socialLink}
+                    href={link.url}
                     target="_blank"
                     rel="noopener noreferrer"
                   >
-                    {rede.label}
+                    {link.label}
                   </a>
                 </li>
               ))}
@@ -39,8 +39,8 @@ export function Footer({ socialLinks = siteContent.socialLinks }: Props) {
           </div>
         )}
 
-        <p className={styles.emergencia}>{footer.emergencyNotice}</p>
-        <p className={styles.privacidade}>{footer.privacyNotice}</p>
+        <p className={styles.emergency}>{footer.emergencyNotice}</p>
+        <p className={styles.privacy}>{footer.privacyNotice}</p>
       </div>
     </footer>
   );

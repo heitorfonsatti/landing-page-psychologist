@@ -1,11 +1,11 @@
-.botao {
+.button {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 0.5rem;
   padding: 0.75rem 1.5rem;
   border-radius: 999px;
-  font-family: var(--fonte-texto);
+  font-family: var(--font-body);
   font-size: 1rem;
   font-weight: 600;
   line-height: 1.2;
@@ -14,20 +14,20 @@
   transition: background-color 180ms ease, color 180ms ease;
 }
 
-.primario {
-  background-color: var(--marrom);
-  color: var(--bege);
+.primary {
+  background-color: var(--brown);
+  color: var(--beige);
 }
 
-.primario:hover {
-  background-color: var(--marrom-escuro);
+.primary:hover {
+  background-color: var(--dark-brown);
 }
 
-.claro {
-  background-color: var(--bege);
-  color: var(--marrom);
+.light {
+  background-color: var(--beige);
+  color: var(--brown);
 }
 
-.claro:hover {
-  color: var(--marrom-escuro);
+.light:hover {
+  color: var(--dark-brown);
 }

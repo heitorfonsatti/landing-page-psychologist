@@ -4,23 +4,23 @@ import { About } from '@/components/About';
 import { siteContent } from '@/content/site';
 
 describe('About', () => {
-  it('expõe a âncora #sobre', () => {
+  it('exposes the #sobre anchor', () => {
     const { container } = render(<About />);
     expect(container.querySelector('section#sobre')).not.toBeNull();
   });
 
-  it('mostra a foto com texto alternativo', () => {
+  it('shows the photo with alt text', () => {
     render(<About />);
     expect(screen.getByAltText(siteContent.about.photo.alt)).toBeInTheDocument();
   });
 
-  it('mostra apresentação, formação e abordagem', () => {
+  it('shows the introduction, education and approach', () => {
     render(<About />);
-    for (const p of siteContent.about.paragraphs) {
-      expect(screen.getByText(p)).toBeInTheDocument();
+    for (const paragraph of siteContent.about.paragraphs) {
+      expect(screen.getByText(paragraph)).toBeInTheDocument();
     }
-    for (const f of siteContent.about.education) {
-      expect(screen.getByText(f)).toBeInTheDocument();
+    for (const item of siteContent.about.education) {
+      expect(screen.getByText(item)).toBeInTheDocument();
     }
     expect(screen.getByText(siteContent.about.approach)).toBeInTheDocument();
   });

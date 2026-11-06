@@ -1,8 +1,8 @@
 import type { SiteContent } from '@/types/content';
 
 /**
- * Termos que não podem aparecer em nenhum texto do site, por conta das
- * regras de publicidade do CFP. Lista editável.
+ * Terms that must not appear in any text on the site, because of the CFP
+ * (Brazilian Federal Council of Psychology) advertising rules. Editable list.
  */
 export const FORBIDDEN_TERMS: readonly string[] = [
   'cura',
@@ -13,76 +13,74 @@ export const FORBIDDEN_TERMS: readonly string[] = [
   'depoimento',
 ];
 
-const CRP_FORMATO = /^\d{2}\/\d{5}$/;
-const CRP_EXEMPLO = '00/00000';
+const CRP_FORMAT = /^\d{2}\/\d{5}$/;
+const CRP_PLACEHOLDER = '00/00000';
 
-const WHATSAPP_FORMATO = /^55\d{10,11}$/;
-const WHATSAPP_EXEMPLO = ['5511999999999', '5500000000000'];
+const WHATSAPP_FORMAT = /^55\d{10,11}$/;
+const WHATSAPP_PLACEHOLDERS = ['5511999999999', '5500000000000'];
 
-function escaparRegex(texto: string): string {
-  return texto.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+function escapeRegex(text: string): string {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 }
 
 /**
- * Monta o casador de um termo.
+ * Builds the matcher for a term.
  *
- * Termos de letras simples casam como palavra inteira — `cura` não deve
- * reprovar `curativo`. Termos com símbolo, como `R$`, casam como substring:
- * `\b` não produz fronteira antes de `$`, então a busca por palavra inteira
- * deixaria `R$ 200` passar.
+ * Plain-letter terms match as whole words, so `cura` does not reject
+ * `curativo`. Terms with symbols, such as `R$`, match as substrings: `\b`
+ * produces no boundary before `$`, so a whole-word search would let
+ * `R$ 200` through.
  */
-function casadorDe(termo: string): RegExp {
-  return /^[a-z]+$/i.test(termo)
-    ? new RegExp(`\\b${escaparRegex(termo)}\\b`, 'i')
-    : new RegExp(escaparRegex(termo), 'i');
+function matcherFor(term: string): RegExp {
+  return /^[a-z]+$/i.test(term)
+    ? new RegExp(`\\b${escapeRegex(term)}\\b`, 'i')
+    : new RegExp(escapeRegex(term), 'i');
 }
 
-type TextoEncontrado = { caminho: string; texto: string };
+type FoundText = { path: string; text: string };
 
-function coletarTextos(valor: unknown, caminho: string, saida: TextoEncontrado[]): void {
-  if (typeof valor === 'string') {
-    saida.push({ caminho, texto: valor });
+function collectTexts(value: unknown, path: string, out: FoundText[]): void {
+  if (typeof value === 'string') {
+    out.push({ path, text: value });
     return;
   }
-  if (Array.isArray(valor)) {
-    valor.forEach((item, i) => coletarTextos(item, `${caminho}[${i}]`, saida));
+  if (Array.isArray(value)) {
+    value.forEach((item, i) => collectTexts(item, `${path}[${i}]`, out));
     return;
   }
-  if (typeof valor === 'object' && valor !== null) {
-    for (const [chave, item] of Object.entries(valor)) {
-      coletarTextos(item, caminho ? `${caminho}.${chave}` : chave, saida);
+  if (typeof value === 'object' && value !== null) {
+    for (const [key, item] of Object.entries(value)) {
+      collectTexts(item, path ? `${path}.${key}` : key, out);
     }
   }
 }
 
-function vazio(valor: string): boolean {
-  return valor.trim().length === 0;
+function isBlank(value: string): boolean {
+  return value.trim().length === 0;
 }
 
 /**
- * Confere o conteúdo do site antes da publicação.
+ * Checks the site content before publishing.
  *
- * @returns lista de problemas; vazia quando o conteúdo está apto a publicar.
+ * @returns list of problems; empty when the content is ready to publish.
  */
 export function checkContent(content: SiteContent): string[] {
-  const erros: string[] = [];
+  const errors: string[] = [];
 
-  if (!CRP_FORMATO.test(content.crp) || content.crp === CRP_EXEMPLO) {
-    erros.push(
-      `crp: ${JSON.stringify(content.crp)} não é um CRP real no formato 00/00000.`,
-    );
+  if (!CRP_FORMAT.test(content.crp) || content.crp === CRP_PLACEHOLDER) {
+    errors.push(`crp: ${JSON.stringify(content.crp)} is not a real CRP in the 00/00000 format.`);
   }
 
   if (
-    !WHATSAPP_FORMATO.test(content.whatsappNumber) ||
-    WHATSAPP_EXEMPLO.includes(content.whatsappNumber)
+    !WHATSAPP_FORMAT.test(content.whatsappNumber) ||
+    WHATSAPP_PLACEHOLDERS.includes(content.whatsappNumber)
   ) {
-    erros.push(
-      `whatsappNumber: ${JSON.stringify(content.whatsappNumber)} não é um número real no formato 55 + DDD + telefone.`,
+    errors.push(
+      `whatsappNumber: ${JSON.stringify(content.whatsappNumber)} is not a real number in the 55 + area code + phone format.`,
     );
   }
 
-  const obrigatorios: ReadonlyArray<[string, string]> = [
+  const required: ReadonlyArray<[string, string]> = [
     ['fullName', content.fullName],
     ['seo.title', content.seo.title],
     ['seo.description', content.seo.description],
@@ -92,24 +90,24 @@ export function checkContent(content: SiteContent): string[] {
     ['about.photo.alt', content.about.photo.alt],
   ];
 
-  for (const [campo, valor] of obrigatorios) {
-    if (vazio(valor)) {
-      erros.push(`${campo}: está vazio e é obrigatório.`);
+  for (const [field, value] of required) {
+    if (isBlank(value)) {
+      errors.push(`${field}: is empty and is required.`);
     }
   }
 
-  const textos: TextoEncontrado[] = [];
-  coletarTextos(content, '', textos);
+  const texts: FoundText[] = [];
+  collectTexts(content, '', texts);
 
-  for (const termo of FORBIDDEN_TERMS) {
-    const casador = casadorDe(termo);
-    const achado = textos.find(({ texto }) => casador.test(texto));
-    if (achado) {
-      erros.push(
-        `termo proibido ${JSON.stringify(termo)} em ${achado.caminho}: ${JSON.stringify(achado.texto)}`,
+  for (const term of FORBIDDEN_TERMS) {
+    const matcher = matcherFor(term);
+    const found = texts.find(({ text }) => matcher.test(text));
+    if (found) {
+      errors.push(
+        `forbidden term ${JSON.stringify(term)} in ${found.path}: ${JSON.stringify(found.text)}`,
       );
     }
   }
 
-  return erros;
+  return errors;
 }

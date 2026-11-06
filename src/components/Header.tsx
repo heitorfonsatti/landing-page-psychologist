@@ -10,15 +10,15 @@ const LINKS = [
 
 export function Header() {
   return (
-    <header className={styles.cabecalho}>
-      <div className={`${styles.interno} conteudo`}>
-        <a className={styles.nome} href="#inicio">
+    <header className={styles.header}>
+      <div className={`${styles.inner} container`}>
+        <a className={styles.name} href="#inicio">
           {siteContent.fullName}
         </a>
 
-        {/* Sem menu "hambúrguer": no celular os links descem para a segunda linha. */}
-        <nav className={styles.navegacao} aria-label="Seções da página">
-          <ul className={styles.lista}>
+        {/* No hamburger menu: on mobile the links wrap to a second row. */}
+        <nav className={styles.nav} aria-label="Seções da página">
+          <ul className={styles.list}>
             {LINKS.map(({ label, href }) => (
               <li key={href}>
                 <a className={styles.link} href={href}>
@@ -29,7 +29,7 @@ export function Header() {
           </ul>
         </nav>
 
-        <WhatsAppButton className={styles.botao} />
+        <WhatsAppButton className={styles.button} />
       </div>
     </header>
   );

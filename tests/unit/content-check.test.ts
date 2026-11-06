@@ -17,7 +17,7 @@ const validContent: SiteContent = {
   hero: {
     headline: 'Um espaço para pensar com calma',
     modality: 'Atendimento online',
-    portrait: { src: '/images/retrato.png', alt: 'Marta sentada em uma poltrona', width: 800, height: 1000 },
+    portrait: { src: '/images/portrait.png', alt: 'Marta sentada em uma poltrona', width: 800, height: 1000 },
   },
   services: {
     title: 'Como posso ajudar',
@@ -28,7 +28,7 @@ const validContent: SiteContent = {
     paragraphs: ['Sou psicóloga clínica e atendo adultos.'],
     education: ['Graduação em Psicologia — Universidade Exemplo, 2016'],
     approach: 'Abordagem cognitivo-comportamental.',
-    photo: { src: '/images/sobre.png', alt: 'Marta em seu consultório', width: 800, height: 800 },
+    photo: { src: '/images/about.png', alt: 'Marta em seu consultório', width: 800, height: 800 },
   },
   howItWorks: {
     title: 'Como funciona',
@@ -47,19 +47,19 @@ const validContent: SiteContent = {
 };
 
 describe('checkContent', () => {
-  it('aprova conteúdo completo e sem termos proibidos', () => {
+  it('accepts complete content with no forbidden terms', () => {
     expect(checkContent(validContent)).toEqual([]);
   });
 
   it.each(['00/00000', '6/12345', '06/1234', '06-12345', 'CRP 06/12345', ''])(
-    'reprova o CRP %j',
+    'rejects the CRP %j',
     (crp) => {
       expect(checkContent({ ...validContent, crp })).toHaveLength(1);
     },
   );
 
   it.each(['5511999999999', '5500000000000', '11987654321', '+5511987654321', ''])(
-    'reprova o WhatsApp %j',
+    'rejects the WhatsApp number %j',
     (whatsappNumber) => {
       expect(checkContent({ ...validContent, whatsappNumber })).toHaveLength(1);
     },
@@ -70,48 +70,48 @@ describe('checkContent', () => {
     ['seo.title', { seo: { ...validContent.seo, title: '' } }],
     ['seo.description', { seo: { ...validContent.seo, description: '' } }],
     [
-      'foto',
+      'photo',
       { hero: { ...validContent.hero, portrait: { ...validContent.hero.portrait, src: '' } } },
     ],
     [
-      'texto alternativo',
+      'alt text',
       { hero: { ...validContent.hero, portrait: { ...validContent.hero.portrait, alt: ' ' } } },
     ],
-  ])('reprova campo obrigatório vazio: %s', (_rotulo, patch) => {
+  ])('rejects an empty required field: %s', (_label, patch) => {
     expect(checkContent({ ...validContent, ...patch })).toHaveLength(1);
   });
 
   it.each(['cura', 'Curar', 'GARANTIDO', 'garantia', 'Depoimento', 'cura.', '(garantia)'])(
-    'reprova o termo %j em qualquer texto',
-    (termo) => {
-      const about = { ...validContent.about, approach: `Trabalho com ${termo} no processo` };
+    'rejects the term %j in any text',
+    (term) => {
+      const about = { ...validContent.about, approach: `Trabalho com ${term} no processo` };
       expect(checkContent({ ...validContent, about })).toHaveLength(1);
     },
   );
 
   it.each(['curativo', 'curadoria', 'procura', 'garantidor', 'Segurança'])(
-    'não confunde %j com termo proibido',
-    (palavra) => {
-      const about = { ...validContent.about, approach: `Falo sobre ${palavra} aqui` };
+    'does not mistake %j for a forbidden term',
+    (word) => {
+      const about = { ...validContent.about, approach: `Falo sobre ${word} aqui` };
       expect(checkContent({ ...validContent, about })).toEqual([]);
     },
   );
 
   // Review Focus 1
   it.each(['R$ 200 por sessão', 'o valor é R$200', 'custa r$ 150'])(
-    'reprova preço em %j',
-    (texto) => {
-      const faq = { ...validContent.faq, items: [{ question: 'Valores?', answer: texto }] };
+    'rejects a price in %j',
+    (text) => {
+      const faq = { ...validContent.faq, items: [{ question: 'Valores?', answer: text }] };
       expect(checkContent({ ...validContent, faq })).toHaveLength(1);
     },
   );
 
-  it('varre também perguntas, respostas, listas e parágrafos', () => {
+  it('also scans questions, answers, lists and paragraphs', () => {
     const faq = { ...validContent.faq, items: [{ question: 'Tem garantia?', answer: 'Sim' }] };
     expect(checkContent({ ...validContent, faq })).toHaveLength(1);
   });
 
-  it('acumula vários problemas de uma vez', () => {
+  it('collects several problems at once', () => {
     expect(checkContent({ ...validContent, crp: '00/00000', fullName: '' })).toHaveLength(2);
   });
 });

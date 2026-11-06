@@ -12,7 +12,7 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
-    // Rascunhos de trabalho, ignorados também pelo git.
+    // Working drafts, also ignored by git.
     ".superpowers/**",
   ]),
 ]);

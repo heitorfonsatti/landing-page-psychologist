@@ -7,23 +7,23 @@ export function Hero() {
   const { fullName, profession, crp, hero } = siteContent;
 
   return (
-    <section className={styles.abertura} data-parte data-cor="bege">
-      <div className={`${styles.interno} conteudo`}>
-        <div className={styles.texto}>
-          <p className={styles.identificacao}>
-            <span className={styles.nome}>{fullName}</span>
-            <span className={styles.profissao}>{profession}</span>
+    <section className={styles.hero} data-panel data-color="beige">
+      <div className={`${styles.inner} container`}>
+        <div className={styles.text}>
+          <p className={styles.identity}>
+            <span className={styles.name}>{fullName}</span>
+            <span className={styles.profession}>{profession}</span>
             <span className={styles.crp}>{`CRP ${crp}`}</span>
           </p>
 
           <h1>{hero.headline}</h1>
 
-          <p className={styles.modalidade}>{hero.modality}</p>
+          <p className={styles.modality}>{hero.modality}</p>
 
           <WhatsAppButton />
         </div>
 
-        <div className={styles.retrato}>
+        <div className={styles.portrait}>
           <Image
             src={hero.portrait.src}
             alt={hero.portrait.alt}

@@ -5,28 +5,28 @@ const css = readFileSync('src/app/globals.css', 'utf8');
 
 describe('globals.css', () => {
   it.each([
-    ['--bege', '#f2efe2'],
-    ['--marrom', '#785135'],
-    ['--azul', '#5b7c81'],
-    ['--verde', '#a1b799'],
-    ['--marrom-escuro', '#3a2718'],
-    ['--azul-escuro', '#466267'],
-  ])('define %s como %s', (nome, valor) => {
-    expect(css).toMatch(new RegExp(`${nome}:\\s*${valor}\\s*;`, 'i'));
+    ['--beige', '#f2efe2'],
+    ['--brown', '#785135'],
+    ['--blue', '#5b7c81'],
+    ['--green', '#a1b799'],
+    ['--dark-brown', '#3a2718'],
+    ['--dark-blue', '#466267'],
+  ])('defines %s as %s', (name, value) => {
+    expect(css).toMatch(new RegExp(`${name}:\\s*${value}\\s*;`, 'i'));
   });
 
-  it('aplica scroll-margin-top nas seções', () => {
-    expect(css).toMatch(/scroll-margin-top:\s*var\(--topo-pilha\)/);
+  it('applies scroll-margin-top to sections', () => {
+    expect(css).toMatch(/scroll-margin-top:\s*var\(--stack-top\)/);
   });
 
   // Review Focus 5
-  it('desativa transições e animações em prefers-reduced-motion', () => {
-    const bloco = css.match(/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?\n\}/)?.[0] ?? '';
-    expect(bloco).toMatch(/transition[^;]*:\s*none/);
-    expect(bloco).toMatch(/animation[^;]*:\s*none/);
+  it('turns off transitions and animations under prefers-reduced-motion', () => {
+    const block = css.match(/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*?\n\}/)?.[0] ?? '';
+    expect(block).toMatch(/transition[^;]*:\s*none/);
+    expect(block).toMatch(/animation[^;]*:\s*none/);
   });
 
-  it('não esconde a rolagem horizontal no body ou no html', () => {
+  it('does not hide horizontal overflow on body or html', () => {
     expect(css).not.toMatch(/overflow-x:\s*hidden/);
   });
 });

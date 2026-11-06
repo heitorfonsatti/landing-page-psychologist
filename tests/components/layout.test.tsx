@@ -2,19 +2,19 @@ import { describe, expect, it } from 'vitest';
 import { metadata } from '@/app/layout';
 import { siteContent } from '@/content/site';
 
-describe('metadados do layout', () => {
-  it('usa título e descrição do conteúdo', () => {
+describe('layout metadata', () => {
+  it('uses the title and description from the content', () => {
     expect(metadata.title).toBe(siteContent.seo.title);
     expect(metadata.description).toBe(siteContent.seo.description);
   });
 
-  it('define metadataBase a partir da URL do site', () => {
+  it('sets metadataBase from the site URL', () => {
     expect(metadata.metadataBase?.toString()).toContain(
       new URL(siteContent.seo.siteUrl).host,
     );
   });
 
-  it('declara o locale pt_BR no OpenGraph', () => {
+  it('declares the pt_BR locale in OpenGraph', () => {
     expect(metadata.openGraph).toMatchObject({ locale: 'pt_BR', type: 'website' });
   });
 });

@@ -1,7 +1,7 @@
 import { defineConfig, devices } from '@playwright/test';
 
-const PORTA = 4173;
-const BASE_URL = `http://localhost:${PORTA}`;
+const PORT = 4173;
+const BASE_URL = `http://localhost:${PORT}`;
 
 export default defineConfig({
   testDir: 'tests/e2e',
@@ -15,29 +15,29 @@ export default defineConfig({
     trace: 'retain-on-failure',
   },
 
-  // Os tamanhos da spec, mais os dois notebooks mais comuns (emenda de seções), só em Chromium.
+  // The sizes from the spec, plus the two most common laptops. Chromium only.
   projects: [
     {
-      name: 'celular',
+      name: 'mobile',
       use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 } },
     },
     {
-      name: 'computador',
+      name: 'desktop',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
     },
     {
-      name: 'notebook',
+      name: 'laptop',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1366, height: 768 } },
     },
     {
-      name: 'notebook-pequeno',
+      name: 'small-laptop',
       use: { ...devices['Desktop Chrome'], viewport: { width: 1280, height: 720 } },
     },
   ],
 
-  // Os testes rodam sobre `out/`, o mesmo diretório que vai para o ar.
+  // Tests run against `out/`, the same directory that goes live.
   webServer: {
-    command: `npx serve out -l ${PORTA} --no-clipboard`,
+    command: `npx serve out -l ${PORT} --no-clipboard`,
     url: BASE_URL,
     reuseExistingServer: !process.env.CI,
     timeout: 60_000,

@@ -2,37 +2,37 @@ import { describe, expect, it } from 'vitest';
 import { siteContent } from '@/content/site';
 
 describe('siteContent', () => {
-  it('traz as quatro dúvidas da spec', () => {
-    const perguntas = siteContent.faq.items
+  it('has the four FAQ topics from the spec', () => {
+    const questions = siteContent.faq.items
       .map((i) => i.question)
       .join(' ')
       .toLowerCase();
     expect(siteContent.faq.items).toHaveLength(4);
-    for (const tema of ['sigilo', 'duração', 'online', 'valor']) {
-      expect(perguntas).toContain(tema);
+    for (const topic of ['sigilo', 'duração', 'online', 'valor']) {
+      expect(questions).toContain(topic);
     }
   });
 
-  it('tem três passos em "Como funciona"', () => {
+  it('has three steps in "How it works"', () => {
     expect(siteContent.howItWorks.steps).toHaveLength(3);
   });
 
-  it('usa a mensagem inicial da spec', () => {
+  it('uses the initial message from the spec', () => {
     expect(siteContent.whatsappMessage).toBe(
       'Olá! Vim pelo site e gostaria de saber mais sobre o atendimento.',
     );
   });
 
-  it('avisa que o site não atende emergências, com CVV e SAMU', () => {
+  it('states that the site does not handle emergencies, with CVV and SAMU', () => {
     expect(siteContent.footer.emergencyNotice).toMatch(/188/);
     expect(siteContent.footer.emergencyNotice).toMatch(/192/);
     expect(siteContent.footer.emergencyNotice.toLowerCase()).toContain('emergência');
   });
 
-  it('informa na privacidade que não há cookies de rastreamento nem formulários', () => {
-    const aviso = siteContent.footer.privacyNotice.toLowerCase();
-    expect(aviso).toContain('cookies');
-    expect(aviso).toContain('formulário');
-    expect(aviso).toContain('whatsapp');
+  it('states in the privacy notice that there are no tracking cookies or forms', () => {
+    const notice = siteContent.footer.privacyNotice.toLowerCase();
+    expect(notice).toContain('cookies');
+    expect(notice).toContain('formulário');
+    expect(notice).toContain('whatsapp');
   });
 });

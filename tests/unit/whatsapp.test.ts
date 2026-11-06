@@ -1,20 +1,20 @@
 import { describe, expect, it } from 'vitest';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
 
-const MENSAGEM = 'Olá! Vim pelo site e gostaria de saber mais sobre o atendimento.';
+const MESSAGE = 'Olá! Vim pelo site e gostaria de saber mais sobre o atendimento.';
 
 describe('buildWhatsAppLink', () => {
-  it('monta a URL wa.me com a mensagem codificada', () => {
-    expect(buildWhatsAppLink('5511987654321', MENSAGEM)).toBe(
+  it('builds the wa.me URL with the encoded message', () => {
+    expect(buildWhatsAppLink('5511987654321', MESSAGE)).toBe(
       'https://wa.me/5511987654321?text=Ol%C3%A1!%20Vim%20pelo%20site%20e%20gostaria%20de%20saber%20mais%20sobre%20o%20atendimento.',
     );
   });
 
-  it('aceita telefone fixo de 10 dígitos após o DDD', () => {
+  it('accepts a 10-digit landline after the area code', () => {
     expect(buildWhatsAppLink('551132654321', 'Oi')).toBe('https://wa.me/551132654321?text=Oi');
   });
 
-  it('codifica caracteres reservados da query', () => {
+  it('encodes reserved query characters', () => {
     expect(buildWhatsAppLink('5511987654321', 'a&b=c?d #e')).toBe(
       'https://wa.me/5511987654321?text=a%26b%3Dc%3Fd%20%23e',
     );
@@ -28,7 +28,7 @@ describe('buildWhatsAppLink', () => {
     '5511987654321 ',
     '551198765432109',
     '',
-  ])('rejeita o número %j', (phone) => {
-    expect(() => buildWhatsAppLink(phone, MENSAGEM)).toThrow(/Número de WhatsApp inválido/);
+  ])('rejects the number %j', (phone) => {
+    expect(() => buildWhatsAppLink(phone, MESSAGE)).toThrow(/Invalid WhatsApp number/);
   });
 });

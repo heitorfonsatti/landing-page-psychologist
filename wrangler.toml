@@ -1,7 +1,7 @@
-# O nome precisa ser igual ao do projeto criado no Cloudflare Pages.
+# Must match the name of the project created in Cloudflare Pages.
 name = "landing-psicologa"
 
-# O diretório que o `next build` gera com `output: 'export'`.
-# Por estar aqui, o `wrangler pages deploy` não recebe o diretório na linha de
-# comando — passar os dois é erro.
+# The directory `next build` produces with `output: 'export'`.
+# Because it is set here, `wrangler pages deploy` does not take the directory
+# on the command line: passing both is an error.
 pages_build_output_dir = "out"

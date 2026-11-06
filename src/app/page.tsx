@@ -5,7 +5,7 @@ import { Footer } from '@/components/Footer';
 import { Header } from '@/components/Header';
 import { Hero } from '@/components/Hero';
 import { HowItWorks } from '@/components/HowItWorks';
-import { Pilha } from '@/components/Pilha';
+import { PanelStack } from '@/components/PanelStack';
 import { Services } from '@/components/Services';
 import styles from './page.module.css';
 
@@ -13,7 +13,7 @@ export default function Home() {
   return (
     <>
       <Header />
-      <main id="inicio" className={styles.principal}>
+      <main id="inicio" className={styles.main}>
         <Hero />
         <Services />
         <About />
@@ -22,7 +22,7 @@ export default function Home() {
         <FinalCta />
       </main>
       <Footer />
-      <Pilha />
+      <PanelStack />
     </>
   );
 }

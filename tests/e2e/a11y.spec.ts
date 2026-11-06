@@ -1,80 +1,80 @@
 import AxeBuilder from '@axe-core/playwright';
 import { expect, test, type Page } from '@playwright/test';
 
-const TAGS_WCAG = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
+const WCAG_TAGS = ['wcag2a', 'wcag2aa', 'wcag21a', 'wcag21aa'];
 
 /**
- * Axe sobre a página inteira, exceto os elementos que estão inteiros atrás
- * da parte seguinte — texto que ninguém vê. Qualquer elemento com algum
- * pedaço à vista continua na análise e precisa ter contraste.
+ * Axe over the whole page, except elements that are entirely behind the next
+ * panel: text nobody can see. Any element with some slice in view stays in
+ * the analysis and must have enough contrast.
  *
- * O critério é por elemento, não pela cobertura da parte: o conteúdo fica
- * centralizado, então uma parte 88% coberta pode não mostrar texto nenhum, e
- * uma parte de conteúdo alto pode mostrar texto mesmo bem coberta.
+ * The criterion is per element, not per panel coverage: content is centered,
+ * so a panel that is 88% covered may show no text at all, and a panel with
+ * tall content may show text even when heavily covered.
  */
-async function axeSemTextoCoberto(page: Page) {
-  await page.$$eval('main > [data-parte]', (partes) => {
-    partes.forEach((parte, i) => {
-      const proxima = partes[i + 1];
-      if (!proxima) {
+async function axeWithoutCoveredText(page: Page) {
+  await page.$$eval('main > [data-panel]', (panels) => {
+    panels.forEach((panel, i) => {
+      const next = panels[i + 1];
+      if (!next) {
         return;
       }
-      // A faixa à vista de uma parte vai do fundo do cabeçalho até o topo da
-      // parte seguinte; o que fica fora dela está escondido.
-      const topoProxima = proxima.getBoundingClientRect().top;
-      const baseCabecalho = document.querySelector('header')!.getBoundingClientRect().bottom;
-      for (const el of Array.from(parte.querySelectorAll<HTMLElement>('*'))) {
+      // The visible band of a panel runs from the bottom of the header to the
+      // top of the next panel; whatever falls outside it is hidden.
+      const nextTop = next.getBoundingClientRect().top;
+      const headerBottom = document.querySelector('header')!.getBoundingClientRect().bottom;
+      for (const el of Array.from(panel.querySelectorAll<HTMLElement>('*'))) {
         const r = el.getBoundingClientRect();
-        const aVista = Math.min(r.bottom, topoProxima) - Math.max(r.top, baseCabecalho);
-        el.toggleAttribute('data-axe-coberto', r.height > 0 && aVista <= 0);
+        const inView = Math.min(r.bottom, nextTop) - Math.max(r.top, headerBottom);
+        el.toggleAttribute('data-axe-covered', r.height > 0 && inView <= 0);
       }
     });
   });
   return new AxeBuilder({ page })
-    .withTags(TAGS_WCAG)
-    .exclude('[data-axe-coberto]')
+    .withTags(WCAG_TAGS)
+    .exclude('[data-axe-covered]')
     .analyze();
 }
 
-test('sem violações WCAG A e AA', async ({ page }) => {
+test('no WCAG A and AA violations', async ({ page }) => {
   await page.goto('/');
-  const { violations } = await new AxeBuilder({ page }).withTags(TAGS_WCAG).analyze();
+  const { violations } = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
   expect(violations).toEqual([]);
 });
 
-// Review Focus 4: as respostas precisam passar por contraste e estrutura.
-// Com o acordeão exclusivo só uma fica aberta por vez, então cada uma é
-// aberta e verificada separadamente.
-test('sem violações com cada dúvida aberta, uma por vez', async ({ page }) => {
+// Review Focus 4: answers must pass contrast and structure checks. With the
+// exclusive accordion only one is open at a time, so each one is opened and
+// checked separately.
+test('no violations with each FAQ answer open, one at a time', async ({ page }) => {
   await page.goto('/');
-  const resumos = page.locator('#duvidas summary');
-  const total = await resumos.count();
+  const summaries = page.locator('#duvidas summary');
+  const total = await summaries.count();
   expect(total).toBeGreaterThan(0);
 
   for (let i = 0; i < total; i++) {
-    await resumos.nth(i).click();
+    await summaries.nth(i).click();
     await expect(page.locator('details[open]')).toHaveCount(1);
     await expect(page.locator('details').nth(i)).toHaveAttribute('open', '');
     await page.waitForTimeout(100);
 
-    const { violations } = await axeSemTextoCoberto(page);
+    const { violations } = await axeWithoutCoveredText(page);
     expect(violations).toEqual([]);
   }
 });
 
-// Revisão final, Important 3: a rolagem é livre, então a visitante pode parar
-// com a parte seguinte cobrindo metade da tela. O texto que ainda aparece da
-// parte de cima precisa manter o contraste.
-test('sem violações com a rolagem parada no meio de uma cobertura', async ({ page }) => {
+// Final review, Important 3: scrolling is free, so the visitor can stop with
+// the next panel covering half the screen. The text still showing from the
+// panel above must keep its contrast.
+test('no violations with scrolling stopped mid-coverage', async ({ page }) => {
   await page.goto('/');
-  await expect(page.locator('html')).toHaveClass(/pilha-ativa/);
+  await expect(page.locator('html')).toHaveClass(/stack-active/);
 
   const y = await page.evaluate(() => {
-    const sobre = document.querySelector('#sobre')!;
-    const fim = document.documentElement.scrollHeight;
-    for (let v = 0; v <= fim; v += 10) {
+    const about = document.querySelector('#sobre')!;
+    const end = document.documentElement.scrollHeight;
+    for (let v = 0; v <= end; v += 10) {
       window.scrollTo({ top: v, behavior: 'instant' });
-      if (sobre.getBoundingClientRect().top <= window.innerHeight / 2) {
+      if (about.getBoundingClientRect().top <= window.innerHeight / 2) {
         return v;
       }
     }
@@ -83,19 +83,19 @@ test('sem violações com a rolagem parada no meio de uma cobertura', async ({ p
   expect(y).toBeGreaterThan(0);
   await page.evaluate((v) => window.scrollTo({ top: v, behavior: 'instant' }), y);
 
-  // espera a cobertura de Serviços ser calculada para esta posição
+  // wait for the coverage of Services to be computed for this position
   await expect
     .poll(() =>
-      page.$eval('#servicos', (s) => Number(s.style.getPropertyValue('--cobertura') || 0)),
+      page.$eval('#servicos', (s) => Number(s.style.getPropertyValue('--coverage') || 0)),
     )
     .toBeGreaterThan(0.3);
 
-  const { violations } = await axeSemTextoCoberto(page);
+  const { violations } = await axeWithoutCoveredText(page);
   expect(violations).toEqual([]);
 });
 
-test('a página 404 não tem violações WCAG A e AA', async ({ page }) => {
+test('the 404 page has no WCAG A and AA violations', async ({ page }) => {
   await page.goto('/404.html');
-  const { violations } = await new AxeBuilder({ page }).withTags(TAGS_WCAG).analyze();
+  const { violations } = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
   expect(violations).toEqual([]);
 });

@@ -1,23 +1,23 @@
 #!/usr/bin/env tsx
 /**
- * Confere o conteúdo real antes de publicar. Roda via `npm run check:content`.
+ * Checks the real content before publishing. Runs via `npm run check:content`.
  *
- * O desenvolvimento pode começar com dados provisórios: esta checagem só
- * aparece no caminho da publicação, e é ela que impede dados de exemplo e
- * textos fora das regras do CFP de entrarem no ar.
+ * Development can start with placeholder data: this check only sits on the
+ * publishing path, and it is what keeps placeholder data and text that breaks
+ * the CFP rules from going live.
  */
 import { siteContent } from '@/content/site';
 import { checkContent } from '@/lib/content-check';
 
-const erros = checkContent(siteContent);
+const errors = checkContent(siteContent);
 
-if (erros.length > 0) {
-  console.error(`Conteúdo reprovado — ${erros.length} problema(s):`);
-  for (const erro of erros) {
-    console.error(`  - ${erro}`);
+if (errors.length > 0) {
+  console.error(`Content rejected: ${errors.length} problem(s):`);
+  for (const error of errors) {
+    console.error(`  - ${error}`);
   }
-  console.error('\nCorrija src/content/site.ts antes de publicar.');
+  console.error('\nFix src/content/site.ts before publishing.');
   process.exit(1);
 }
 
-console.log('Conteúdo aprovado.');
+console.log('Content approved.');

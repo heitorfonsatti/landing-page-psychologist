@@ -1,4 +1,4 @@
-/* Reserva o espaço do cabeçalho fixo. */
-.principal {
-  padding-top: var(--topo-pilha);
+/* Reserves the space of the fixed header. */
+.main {
+  padding-top: var(--stack-top);
 }

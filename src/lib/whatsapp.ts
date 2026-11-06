@@ -1,19 +1,19 @@
-/** `55` + DDD (2 dígitos) + telefone (8 ou 9 dígitos), somente dígitos. */
-const FORMATO_WHATSAPP = /^55\d{10,11}$/;
+/** `55` + area code (2 digits) + phone (8 or 9 digits), digits only. */
+const WHATSAPP_FORMAT = /^55\d{10,11}$/;
 
 /**
- * Monta o link `wa.me` com a mensagem inicial já codificada.
+ * Builds the `wa.me` link with the initial message already encoded.
  *
- * A entrada não é normalizada de propósito: um número formatado
- * (`+55 (11) 98765-4321`) geraria um link quebrado sem aviso, então ele é
- * rejeitado em vez de limpo.
+ * The input is deliberately not normalized: a formatted number
+ * (`+55 (11) 98765-4321`) would silently produce a broken link, so it is
+ * rejected instead of cleaned up.
  *
- * @throws {Error} quando `phone` não é `55` + DDD + telefone, somente dígitos.
+ * @throws {Error} when `phone` is not `55` + area code + phone, digits only.
  */
 export function buildWhatsAppLink(phone: string, message: string): string {
-  if (!FORMATO_WHATSAPP.test(phone)) {
+  if (!WHATSAPP_FORMAT.test(phone)) {
     throw new Error(
-      `Número de WhatsApp inválido: ${JSON.stringify(phone)}. Use 55 + DDD + telefone, somente dígitos.`,
+      `Invalid WhatsApp number: ${JSON.stringify(phone)}. Use 55 + area code + phone, digits only.`,
     );
   }
 

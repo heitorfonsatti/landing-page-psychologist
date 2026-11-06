@@ -40,17 +40,17 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# testes
+# tests
 /test-results/
 /playwright-report/
 /blob-report/
 /playwright/.cache/
 
-# editores
+# editors
 .idea/
 .vscode/
 
-# superpowers (spec, plano e area de trabalho ficam fora do versionamento)
+# superpowers (spec, plan and workspace stay out of version control)
 docs/superpowers/
 .superpowers/
 docs/publicacao.md
