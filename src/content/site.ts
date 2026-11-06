@@ -41,26 +41,50 @@ export const siteContent: SiteContent = {
 
   services: {
     title: 'Como posso ajudar',
+    moreLabel: 'Saber mais',
+    backLabel: 'Voltar',
+    struggleLabel: 'O que você pode estar vivendo',
+    supportLabel: 'Como a terapia pode ajudar',
     items: [
       {
         title: 'Ansiedade e preocupação constante',
         description: 'Quando a cabeça não desacelera e o corpo parece viver em alerta.',
+        struggle:
+          'Talvez você passe o dia antecipando o que pode dar errado, durma mal ou sinta o peito apertado sem um motivo claro. A preocupação ocupa tanto espaço que sobra pouco para viver o agora.',
+        support:
+          'Na terapia, identificamos os pensamentos que alimentam esse estado de alerta e treinamos, aos poucos, novas formas de responder a eles. A ansiedade não some por decreto, mas pode voltar a ter um tamanho que cabe na sua rotina.',
       },
       {
         title: 'Luto e perdas',
         description: 'Para atravessar uma despedida sem precisar fazer isso sozinha.',
+        struggle:
+          'Perder alguém, ou algo importante, pode deixar tudo fora do lugar. A dor vem em ondas, às vezes acompanhada de culpa ou da sensação de que você já deveria estar melhor.',
+        support:
+          'A terapia é um lugar para dar nome ao que você sente, no seu tempo e sem cobrança. Não se trata de esquecer, e sim de encontrar um jeito de seguir carregando essa história com menos peso.',
       },
       {
         title: 'Relações e limites',
         description: 'Dificuldade de dizer não, conflitos que se repetem, medo de desagradar.',
+        struggle:
+          'Você diz sim quando queria dizer não, evita conversas difíceis ou percebe as mesmas brigas se repetindo com pessoas diferentes. Tentar agradar a todos acaba custando caro.',
+        support:
+          'Juntas, olhamos para os padrões que se repetem nas suas relações e praticamos formas de se posicionar com clareza e cuidado. Um limite saudável não afasta quem importa: aproxima.',
       },
       {
         title: 'Autoestima e autocrítica',
         description: 'A voz interna que cobra demais e reconhece de menos.',
+        struggle:
+          'Nada parece bom o bastante: cada conquista vira obrigação e cada erro vira prova de que você não dá conta. Essa voz crítica costuma falar mais alto do que qualquer elogio.',
+        support:
+          'Na terapia, aprendemos a reconhecer essa voz, questionar o que ela diz e construir um olhar mais justo sobre você mesma. Confiança em si se desenvolve, como qualquer outra habilidade.',
       },
       {
         title: 'Transições de vida e de trabalho',
         description: 'Mudanças de cidade, de carreira ou de fase que pedem tempo para assentar.',
+        struggle:
+          'Mudar de cidade, de emprego, encerrar um ciclo ou começar outro: mesmo as mudanças desejadas podem trazer insegurança, cansaço e a sensação de não pertencer a lugar nenhum.',
+        support:
+          'O acompanhamento ajuda a organizar o que está mudando, lidar com a incerteza e fazer escolhas com mais calma, com mais clareza sobre o que você quer daqui para frente.',
       },
     ],
   },
