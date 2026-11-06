@@ -1,3 +1,4 @@
+import Image from 'next/image';
 import { siteContent } from '@/content/site';
 import { WhatsAppButton } from './WhatsAppButton';
 import styles from './Header.module.css';
@@ -13,6 +14,8 @@ export function Header() {
     <header className={styles.header}>
       <div className={`${styles.inner} container`}>
         <a className={styles.name} href="#inicio">
+          {/* Decorative: the name next to it already labels the link. */}
+          <Image className={styles.logo} src="/images/logo.png" alt="" width={240} height={215} priority />
           {siteContent.fullName}
         </a>
 

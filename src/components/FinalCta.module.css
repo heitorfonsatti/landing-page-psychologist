@@ -6,6 +6,11 @@
   gap: 2rem;
 }
 
+.logo {
+  width: auto;
+  height: clamp(4.5rem, 10vw, 6.5rem);
+}
+
 .headline {
   max-width: 28ch;
   margin: 0;

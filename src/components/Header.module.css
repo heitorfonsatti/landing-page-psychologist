@@ -3,6 +3,11 @@
   inset-inline: 0;
   top: 0;
   z-index: 10;
+  /* Center the content vertically so it sits evenly above the bottom border
+     instead of hugging the top edge. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   min-height: var(--header-height);
   background-color: var(--beige);
   border-bottom: 1px solid color-mix(in srgb, var(--brown) 12%, transparent);
@@ -22,12 +27,21 @@
 
 .name {
   grid-area: name;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.625rem;
   font-family: var(--font-heading);
   font-size: clamp(1.0625rem, 4vw, 1.25rem);
   font-weight: 500;
   line-height: 1.2;
   text-decoration: none;
   color: var(--brown);
+}
+
+.logo {
+  flex-shrink: 0;
+  width: auto;
+  height: 2.25rem;
 }
 
 .button {
@@ -74,6 +88,10 @@
 
   .list {
     gap: 2rem;
+  }
+
+  .logo {
+    height: 2.75rem;
   }
 
   .button {
