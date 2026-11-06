@@ -13,7 +13,7 @@
 
 .item {
   padding: 1.25rem 1.5rem;
-  background-color: rgb(120 81 53 / 0.06);
+  background-color: color-mix(in srgb, var(--ink) 6%, transparent);
   border-radius: var(--radius);
 }
 
@@ -40,8 +40,8 @@
   width: 0.625rem;
   height: 0.625rem;
   margin-top: 0.45em;
-  border-right: 2px solid var(--blue);
-  border-bottom: 2px solid var(--blue);
+  border-right: 2px solid var(--ink);
+  border-bottom: 2px solid var(--ink);
   transform: rotate(45deg);
   transition: transform 180ms ease;
 }

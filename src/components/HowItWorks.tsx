@@ -5,7 +5,7 @@ export function HowItWorks() {
   const { title, steps } = siteContent.howItWorks;
 
   return (
-    <section className={`${styles.howItWorks} section`} data-panel data-color="beige">
+    <section className={`${styles.howItWorks} section`} data-panel data-color="brown">
       <div className="container">
         <h2>{title}</h2>
 

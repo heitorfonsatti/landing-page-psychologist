@@ -5,7 +5,7 @@ export function Services() {
   const { title, items } = siteContent.services;
 
   return (
-    <section id="servicos" className={`${styles.services} section`} data-panel data-color="green">
+    <section id="servicos" className={`${styles.services} section`} data-panel data-color="brown">
       <div className="container">
         <h2>{title}</h2>
 

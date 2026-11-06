@@ -110,3 +110,38 @@ test('the 404 page links home and has no clinical content', async ({ page }) => 
   await expect(page.locator('a[href^="https://wa.me/"]')).toHaveCount(0);
   await expect(page.getByText(/CRP/)).toHaveCount(0);
 });
+
+const BEIGE = 'rgb(242, 239, 226)';
+const BROWN = 'rgb(120, 81, 53)';
+
+test('panels alternate beige and brown, text always the opposite', async ({ page }) => {
+  const colors = await page.$$eval('main > [data-panel]', (panels) =>
+    panels.map((p) => {
+      const style = getComputedStyle(p);
+      return [style.backgroundColor, style.color];
+    }),
+  );
+  expect(colors).toEqual([
+    [BEIGE, BROWN],
+    [BROWN, BEIGE],
+    [BEIGE, BROWN],
+    [BROWN, BEIGE],
+    [BEIGE, BROWN],
+    [BROWN, BEIGE],
+  ]);
+
+  const footer = await page.$eval('footer', (f) => {
+    const style = getComputedStyle(f);
+    return [style.backgroundColor, style.color];
+  });
+  expect(footer).toEqual([BEIGE, BROWN]);
+});
+
+// Review Focus 1: the focus ring must stay visible on a brown panel.
+test('focus ring is beige on a brown panel', async ({ page }) => {
+  const button = page.locator('main > [data-panel]').last().getByRole('link');
+  await page.keyboard.press('Tab');
+  await button.focus();
+  await expect(button).toBeFocused();
+  expect(await button.evaluate((el) => getComputedStyle(el).outlineColor)).toBe(BEIGE);
+});

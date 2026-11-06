@@ -5,7 +5,7 @@
   z-index: 10;
   min-height: var(--header-height);
   background-color: var(--beige);
-  border-bottom: 1px solid rgb(120 81 53 / 0.12);
+  border-bottom: 1px solid color-mix(in srgb, var(--brown) 12%, transparent);
 }
 
 /* Mobile: name and button on the first row, links on the second. */

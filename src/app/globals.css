@@ -1,15 +1,16 @@
 :root {
-  /* Palette. Allowed pairings (contrast checked):
-     brown on beige 6.02:1 · beige on brown 6.02:1 ·
-     dark brown on green 6.57:1 · beige on dark blue 5.69:1 ·
-     blue on beige 3.92:1 — large text and non-text elements only.
-     Green is never a text color on beige (1.87:1). */
+  /* Palette: only beige and brown, alternating panel by panel.
+     Brown on beige 6.02:1 · beige on brown 6.02:1.
+     Dark brown is only for button hover feedback. */
   --beige: #f2efe2;
   --brown: #785135;
-  --blue: #5b7c81;
-  --green: #a1b799;
   --dark-brown: #3a2718;
-  --dark-blue: #466267;
+
+  /* Accent color of the current panel: always the text color. Panels redefine it. */
+  --ink: var(--brown);
+
+  /* How much a covered panel's content fades at full coverage. */
+  --fade-max: 0.55;
 
   --font-heading: var(--font-fraunces), Georgia, "Times New Roman", serif;
   --font-body: var(--font-source-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -94,7 +95,7 @@ img {
 }
 
 :focus-visible {
-  outline: 3px solid var(--blue);
+  outline: 3px solid var(--ink);
   outline-offset: 3px;
   border-radius: 4px;
 }
@@ -131,9 +132,18 @@ img {
    motion. Without it, the page scrolls as it always did.
    --------------------------------------------------------------- */
 
-/* Panels without their own background must be opaque to cover the previous one. */
-:where([data-panel]) {
+/* Panel colors, with or without the stack: background, text and accents.
+   Opaque backgrounds also let each panel cover the previous one. */
+[data-color="beige"] {
   background-color: var(--beige);
+  color: var(--brown);
+  --ink: var(--brown);
+}
+
+[data-color="brown"] {
+  background-color: var(--brown);
+  color: var(--beige);
+  --ink: var(--beige);
 }
 
 .stack-active [data-panel] {
@@ -149,18 +159,12 @@ img {
   justify-content: center;
 }
 
-/* Fade the content, never the background. The fade has a floor: scrolling is
-   free, so the visitor can stop with any slice of a panel in view, and that
-   text must keep 4.5:1. Computed for the palette pairings, the tightest one
-   (brown on beige, 6.02:1) reaches 4.5:1 at opacity 0.87, hence the 0.88
-   floor. */
+/* Fade the content, never the background. The fade is strong by design
+   (--fade-max) so the cover effect is visible; the text never vanishes, but
+   while a panel is being covered its contrast may drop below 4.5:1. Panels at
+   rest and the covering panel keep full contrast. */
 .stack-active [data-panel] > * {
-  opacity: calc(1 - 0.12 * var(--coverage, 0));
-}
-
-/* Consecutive beige panels: a hairline marks the seam. */
-.stack-active [data-panel][data-color="beige"] + [data-panel][data-color="beige"] {
-  border-top: 1px solid color-mix(in srgb, var(--brown) 15%, transparent);
+  opacity: calc(1 - var(--fade-max) * var(--coverage, 0));
 }
 
 @media (prefers-reduced-motion: reduce) {

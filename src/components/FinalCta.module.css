@@ -1,9 +1,4 @@
-/* Beige on dark blue: 5.69:1. The button is beige with brown text. */
-.finalCta {
-  background-color: var(--dark-blue);
-  color: var(--beige);
-}
-
+/* Brown panel: the button uses the light variant (beige with brown text). */
 .inner {
   display: flex;
   flex-direction: column;

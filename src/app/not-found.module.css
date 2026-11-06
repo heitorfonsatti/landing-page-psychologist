@@ -10,7 +10,7 @@
   font-family: var(--font-heading);
   font-size: clamp(3rem, 8vw, 5rem);
   line-height: 1;
-  color: var(--blue);
+  color: var(--ink);
 }
 
 .text {
