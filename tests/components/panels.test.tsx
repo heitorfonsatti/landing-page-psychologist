@@ -8,11 +8,11 @@ describe('page panels', () => {
     const panels = [...container.querySelectorAll('[data-panel]')];
     expect(panels.map((p) => p.getAttribute('data-color'))).toEqual([
       'beige',
-      'green',
+      'brown',
       'beige',
+      'brown',
       'beige',
-      'beige',
-      'dark-blue',
+      'brown',
     ]);
     expect(container.querySelector('footer')?.hasAttribute('data-panel')).toBe(false);
   });

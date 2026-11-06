@@ -7,12 +7,13 @@ describe('globals.css', () => {
   it.each([
     ['--beige', '#f2efe2'],
     ['--brown', '#785135'],
-    ['--blue', '#5b7c81'],
-    ['--green', '#a1b799'],
     ['--dark-brown', '#3a2718'],
-    ['--dark-blue', '#466267'],
   ])('defines %s as %s', (name, value) => {
     expect(css).toMatch(new RegExp(`${name}:\\s*${value}\\s*;`, 'i'));
+  });
+
+  it.each(['--blue', '--green', '--dark-blue'])('no longer defines %s', (name) => {
+    expect(css).not.toMatch(new RegExp(`${name}:`));
   });
 
   it('applies scroll-margin-top to sections', () => {

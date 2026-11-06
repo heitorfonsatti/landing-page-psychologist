@@ -13,6 +13,10 @@ describe('module stylesheets', () => {
     expect(files.length).toBeGreaterThan(0);
   });
 
+  it.each(files)('%s does not use retired palette tokens', (file) => {
+    expect(read(file)).not.toMatch(/var\(--(blue|green|dark-blue)\)/);
+  });
+
   // Colors come from the palette tokens, so each panel can recolor its accents.
   it.each(files)('%s has no hard-coded colors', (file) => {
     expect(read(file)).not.toMatch(/rgb\(|#[0-9a-f]{3,8}\b/i);

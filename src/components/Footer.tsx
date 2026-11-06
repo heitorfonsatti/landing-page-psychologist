@@ -11,7 +11,7 @@ export function Footer({ socialLinks = siteContent.socialLinks }: Props) {
   const { fullName, profession, crp, footer } = siteContent;
 
   return (
-    <footer className={styles.footer}>
+    <footer className={styles.footer} data-color="beige">
       <div className={`${styles.inner} container`}>
         <div className={styles.identity}>
           <span className={styles.name}>{fullName}</span>

@@ -1,7 +1,4 @@
-/* Beige on brown: 6.02:1. */
 .footer {
-  background-color: var(--brown);
-  color: var(--beige);
   padding-block: clamp(3rem, 6vw, 4.5rem);
 }
 

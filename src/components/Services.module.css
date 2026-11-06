@@ -1,9 +1,3 @@
-/* Dark brown on green: 6.57:1. */
-.services {
-  background-color: var(--green);
-  color: var(--dark-brown);
-}
-
 .services h2 {
   max-width: 24ch;
   margin-bottom: 2.5rem;
