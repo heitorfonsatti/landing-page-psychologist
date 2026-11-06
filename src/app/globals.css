@@ -11,6 +11,9 @@
   --dark-brown: #3a2718;
   --dark-blue: #466267;
 
+  /* Accent color of the current panel: always the text color. Panels redefine it. */
+  --ink: var(--brown);
+
   --font-heading: var(--font-fraunces), Georgia, "Times New Roman", serif;
   --font-body: var(--font-source-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
 
@@ -94,7 +97,7 @@ img {
 }
 
 :focus-visible {
-  outline: 3px solid var(--blue);
+  outline: 3px solid var(--ink);
   outline-offset: 3px;
   border-radius: 4px;
 }
