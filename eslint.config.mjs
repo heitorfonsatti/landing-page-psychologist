@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Working drafts, also ignored by git.
+    ".superpowers/**",
   ]),
 ]);
 

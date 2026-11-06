@@ -1,18 +1,18 @@
-.abertura {
-  padding-block: var(--respiro-secao);
+.hero {
+  padding-block: var(--section-spacing);
 }
 
-.interno {
+.inner {
   display: grid;
   gap: clamp(2.5rem, 6vw, 4rem);
   align-items: center;
 }
 
-.texto {
+.text {
   min-width: 0;
 }
 
-.identificacao {
+.identity {
   display: flex;
   flex-wrap: wrap;
   align-items: baseline;
@@ -22,18 +22,18 @@
   letter-spacing: 0.02em;
 }
 
-.nome {
+.name {
   font-weight: 600;
 }
 
-.profissao,
+.profession,
 .crp {
   position: relative;
   padding-left: 1.125rem;
 }
 
-/* Separadores decorativos: não entram na leitura. */
-.profissao::before,
+/* Decorative separators: not part of the reading order. */
+.profession::before,
 .crp::before {
   content: "";
   position: absolute;
@@ -42,22 +42,22 @@
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 50%;
-  background-color: var(--azul);
+  background-color: var(--blue);
 }
 
-.modalidade {
+.modality {
   max-width: 34ch;
   font-size: 1.125rem;
   margin-bottom: 2rem;
 }
 
-.retrato img {
+.portrait img {
   width: 100%;
-  border-radius: var(--raio-grande);
+  border-radius: var(--radius-large);
 }
 
 @media (min-width: 48rem) {
-  .interno {
+  .inner {
     grid-template-columns: 1fr minmax(0, 0.85fr);
   }
 }

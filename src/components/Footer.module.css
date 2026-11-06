@@ -1,29 +1,29 @@
-/* Bege sobre marrom: 6,02:1. */
-.rodape {
-  background-color: var(--marrom);
-  color: var(--bege);
+/* Beige on brown: 6.02:1. */
+.footer {
+  background-color: var(--brown);
+  color: var(--beige);
   padding-block: clamp(3rem, 6vw, 4.5rem);
 }
 
-.interno {
+.inner {
   display: grid;
   gap: 1.5rem;
   max-width: 60rem;
 }
 
-.identificacao {
+.identity {
   display: flex;
   flex-wrap: wrap;
   gap: 0.25rem 1.25rem;
   font-size: 0.9375rem;
 }
 
-.nome {
-  font-family: var(--fonte-titulo);
+.name {
+  font-family: var(--font-heading);
   font-size: 1.125rem;
 }
 
-.listaRedes {
+.socialList {
   display: flex;
   flex-wrap: wrap;
   gap: 1.25rem;
@@ -32,22 +32,22 @@
   list-style: none;
 }
 
-.linkRede {
+.socialLink {
   font-size: 0.9375rem;
   text-decoration: underline;
   text-underline-offset: 0.25em;
 }
 
-.emergencia {
+.emergency {
   margin: 0;
   padding: 1rem 1.25rem;
   border: 1px solid rgb(242 239 226 / 0.35);
-  border-radius: var(--raio);
+  border-radius: var(--radius);
   font-size: 0.9375rem;
   max-width: 60ch;
 }
 
-.privacidade {
+.privacy {
   margin: 0;
   font-size: 0.875rem;
   opacity: 0.9;

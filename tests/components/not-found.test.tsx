@@ -3,12 +3,12 @@ import { describe, expect, it } from 'vitest';
 import NotFound from '@/app/not-found';
 
 describe('NotFound', () => {
-  it('oferece volta para a página principal', () => {
+  it('links back to the home page', () => {
     render(<NotFound />);
     expect(screen.getByRole('link', { name: /início|principal/i })).toHaveAttribute('href', '/');
   });
 
-  it('não traz conteúdo clínico nem botão de WhatsApp', () => {
+  it('has no clinical content and no WhatsApp button', () => {
     const { container } = render(<NotFound />);
     expect(container.innerHTML).not.toContain('wa.me');
     expect(screen.queryByText(/CRP/)).not.toBeInTheDocument();

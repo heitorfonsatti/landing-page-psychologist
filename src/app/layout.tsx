@@ -4,13 +4,13 @@ import { siteContent } from '@/content/site';
 import './globals.css';
 
 const fraunces = Fraunces({
-  variable: '--fonte-fraunces',
+  variable: '--font-fraunces',
   subsets: ['latin'],
   display: 'swap',
 });
 
 const sourceSans = Source_Sans_3({
-  variable: '--fonte-source-sans',
+  variable: '--font-source-sans',
   subsets: ['latin'],
   display: 'swap',
 });

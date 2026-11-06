@@ -1,15 +1,17 @@
 import type { SiteContent } from '@/types/content';
 
 /**
- * CONTEÚDO PROVISÓRIO — nada aqui é real.
+ * PLACEHOLDER CONTENT: nothing here is real.
  *
- * Nome, formação, textos e fotos são fictícios e existem para o
- * desenvolvimento andar. O CRP (`00/00000`) e o WhatsApp (`5511999999999`)
- * são valores de exemplo de propósito: `npm run check:content` barra os dois
- * e, com isso, barra a publicação até que os dados reais entrem aqui.
+ * Name, education, copy and photos are fictional and exist so development
+ * can move forward. The CRP (`00/00000`) and the WhatsApp number
+ * (`5511999999999`) are placeholders on purpose: `npm run check:content`
+ * rejects both and, with that, blocks publishing until the real data is in.
  *
- * Antes de publicar: substituir tudo, trocar as fotos em `public/images/`
- * pelas imagens reais nos tamanhos finais, e rodar `npm run check:content`.
+ * Visitor-facing copy stays in Brazilian Portuguese.
+ *
+ * Before publishing: replace everything, swap the photos in `public/images/`
+ * for the real images at their final sizes, and run `npm run check:content`.
  */
 export const siteContent: SiteContent = {
   fullName: 'Ana Beatriz Moraes',
@@ -30,7 +32,7 @@ export const siteContent: SiteContent = {
     headline: 'Um espaço para você se escutar com calma',
     modality: 'Atendimento online, para adultos em todo o Brasil',
     portrait: {
-      src: '/images/retrato.png',
+      src: '/images/portrait.png',
       alt: 'Ana Beatriz Moraes sentada em uma poltrona clara, olhando para a câmera',
       width: 800,
       height: 1000,
@@ -77,7 +79,7 @@ export const siteContent: SiteContent = {
     approach:
       'Trabalho na abordagem cognitivo-comportamental: olhamos juntas para os padrões de pensamento e de comportamento que se repetem e construímos, no seu tempo, formas mais possíveis de lidar com eles no dia a dia.',
     photo: {
-      src: '/images/sobre.png',
+      src: '/images/about.png',
       alt: 'Ana Beatriz Moraes em seu consultório, diante de uma estante de livros',
       width: 800,
       height: 800,

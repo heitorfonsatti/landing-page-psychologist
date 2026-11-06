@@ -2,22 +2,22 @@ import { siteContent } from '@/content/site';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
 import styles from './WhatsAppButton.module.css';
 
-type Variante = 'primario' | 'claro';
+type Variant = 'primary' | 'light';
 
 type Props = {
-  /** Texto do botão. Por padrão, o convite definido no conteúdo. */
+  /** Button text. Defaults to the call to action defined in the content. */
   label?: string;
-  /** `primario`: bege sobre marrom. `claro`: bege com texto marrom, para a chamada final. */
-  variant?: Variante;
+  /** `primary`: beige on brown. `light`: beige with brown text, for the final call to action. */
+  variant?: Variant;
   className?: string;
 };
 
-export function WhatsAppButton({ label, variant = 'primario', className }: Props) {
+export function WhatsAppButton({ label, variant = 'primary', className }: Props) {
   const href = buildWhatsAppLink(siteContent.whatsappNumber, siteContent.whatsappMessage);
 
   return (
     <a
-      className={[styles.botao, styles[variant], className].filter(Boolean).join(' ')}
+      className={[styles.button, styles[variant], className].filter(Boolean).join(' ')}
       href={href}
       target="_blank"
       rel="noopener noreferrer"

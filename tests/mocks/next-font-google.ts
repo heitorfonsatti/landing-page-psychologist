@@ -1,28 +1,28 @@
 /**
- * Substituto de `next/font/google` nos testes.
+ * Stand-in for `next/font/google` in tests.
  *
- * `next/font/google` é uma transformação de build: fora do bundler do Next,
- * `Fraunces(...)` não existe em tempo de execução. Este módulo entra no lugar
- * dele pelo alias em `vitest.config.mts`.
+ * `next/font/google` is a build-time transform: outside the Next bundler,
+ * `Fraunces(...)` does not exist at runtime. This module replaces it through
+ * the alias in `vitest.config.mts`.
  *
- * Ao adicionar uma fonte ao site, adicione-a aqui também — o teste falha com
- * "X is not a function", que é o aviso de que isto ficou para trás.
+ * When adding a font to the site, add it here too. The test fails with
+ * "X is not a function", which is the signal that this file fell behind.
  */
-type ResultadoFonte = {
+type FontResult = {
   className: string;
   variable: string;
   style: { fontFamily: string };
 };
 
-type OpcoesFonte = { variable?: string };
+type FontOptions = { variable?: string };
 
-function fonteFalsa(nome: string) {
-  return (opcoes?: OpcoesFonte): ResultadoFonte => ({
-    className: `fonte-${nome}`,
-    variable: opcoes?.variable ?? `--fonte-${nome}`,
-    style: { fontFamily: nome },
+function fakeFont(name: string) {
+  return (options?: FontOptions): FontResult => ({
+    className: `font-${name}`,
+    variable: options?.variable ?? `--font-${name}`,
+    style: { fontFamily: name },
   });
 }
 
-export const Fraunces = fonteFalsa('fraunces');
-export const Source_Sans_3 = fonteFalsa('source-sans-3');
+export const Fraunces = fakeFont('fraunces');
+export const Source_Sans_3 = fakeFont('source-sans-3');

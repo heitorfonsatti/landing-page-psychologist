@@ -4,16 +4,16 @@ import { HowItWorks } from '@/components/HowItWorks';
 import { siteContent } from '@/content/site';
 
 describe('HowItWorks', () => {
-  it('lista os três passos em ordem', () => {
+  it('lists the three steps in order', () => {
     render(<HowItWorks />);
-    const itens = screen.getAllByRole('listitem');
-    expect(itens).toHaveLength(3);
-    siteContent.howItWorks.steps.forEach((passo, i) => {
-      expect(itens[i]).toHaveTextContent(passo.title);
+    const items = screen.getAllByRole('listitem');
+    expect(items).toHaveLength(3);
+    siteContent.howItWorks.steps.forEach((step, i) => {
+      expect(items[i]).toHaveTextContent(step.title);
     });
   });
 
-  it('tem um h2 com o título da seção', () => {
+  it('has an h2 with the section title', () => {
     render(<HowItWorks />);
     expect(screen.getByRole('heading', { level: 2 })).toHaveTextContent(
       siteContent.howItWorks.title,

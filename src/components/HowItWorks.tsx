@@ -5,18 +5,18 @@ export function HowItWorks() {
   const { title, steps } = siteContent.howItWorks;
 
   return (
-    <section className={`${styles.comoFunciona} secao`}>
-      <div className="conteudo">
+    <section className={`${styles.howItWorks} section`} data-panel data-color="beige">
+      <div className="container">
         <h2>{title}</h2>
 
-        {/* A numeração grande é decorativa (CSS counter, azul sobre bege,
-            3,92:1 — permitido só em texto grande). A ordem é carregada
-            pelo <ol>, não pelo número desenhado. */}
-        <ol className={styles.lista}>
-          {steps.map((passo) => (
-            <li key={passo.title} className={styles.passo}>
-              <h3 className={styles.passoTitulo}>{passo.title}</h3>
-              <p className={styles.passoTexto}>{passo.description}</p>
+        {/* The large numbers are decorative (CSS counter, blue on beige,
+            3.92:1, allowed for large text only). The order is carried by
+            the <ol>, not by the drawn number. */}
+        <ol className={styles.list}>
+          {steps.map((step) => (
+            <li key={step.title} className={styles.step}>
+              <h3 className={styles.stepTitle}>{step.title}</h3>
+              <p className={styles.stepText}>{step.description}</p>
             </li>
           ))}
         </ol>

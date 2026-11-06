@@ -7,7 +7,7 @@ export default defineConfig({
   resolve: {
     tsconfigPaths: true,
     alias: {
-      // `next/font/google` só existe dentro do bundler do Next.
+      // `next/font/google` only exists inside the Next bundler.
       'next/font/google': fileURLToPath(
         new URL('./tests/mocks/next-font-google.ts', import.meta.url),
       ),

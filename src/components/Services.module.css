@@ -1,15 +1,15 @@
-/* Marrom-escuro sobre verde: 6,57:1. */
-.servicos {
-  background-color: var(--verde);
-  color: var(--marrom-escuro);
+/* Dark brown on green: 6.57:1. */
+.services {
+  background-color: var(--green);
+  color: var(--dark-brown);
 }
 
-.servicos h2 {
+.services h2 {
   max-width: 24ch;
   margin-bottom: 2.5rem;
 }
 
-.lista {
+.list {
   display: grid;
   gap: 1.25rem;
   margin: 0;
@@ -20,27 +20,27 @@
 .item {
   padding: 1.75rem;
   background-color: rgb(242 239 226 / 0.45);
-  border-radius: var(--raio);
+  border-radius: var(--radius);
 }
 
-.itemTitulo {
+.itemTitle {
   margin-bottom: 0.5rem;
-  color: var(--marrom-escuro);
+  color: var(--dark-brown);
 }
 
-.itemTexto {
+.itemText {
   margin: 0;
   max-width: 40ch;
 }
 
 @media (min-width: 40rem) {
-  .lista {
+  .list {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 
 @media (min-width: 64rem) {
-  .lista {
+  .list {
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }

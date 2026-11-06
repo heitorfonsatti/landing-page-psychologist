@@ -1,35 +1,35 @@
-.pagina {
+.page {
   display: flex;
   align-items: center;
   min-height: 100vh;
-  padding-block: var(--respiro-secao);
+  padding-block: var(--section-spacing);
 }
 
-.codigo {
+.code {
   margin-bottom: 0.5rem;
-  font-family: var(--fonte-titulo);
+  font-family: var(--font-heading);
   font-size: clamp(3rem, 8vw, 5rem);
   line-height: 1;
-  color: var(--azul);
+  color: var(--blue);
 }
 
-.texto {
+.text {
   max-width: 40ch;
   margin-bottom: 2rem;
 }
 
-.voltar {
+.back {
   display: inline-flex;
   align-items: center;
   padding: 0.75rem 1.5rem;
   border-radius: 999px;
-  background-color: var(--marrom);
-  color: var(--bege);
+  background-color: var(--brown);
+  color: var(--beige);
   font-weight: 600;
   text-decoration: none;
   transition: background-color 180ms ease;
 }
 
-.voltar:hover {
-  background-color: var(--marrom-escuro);
+.back:hover {
+  background-color: var(--dark-brown);
 }

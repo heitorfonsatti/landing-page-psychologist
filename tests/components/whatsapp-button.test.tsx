@@ -5,7 +5,7 @@ import { siteContent } from '@/content/site';
 import { buildWhatsAppLink } from '@/lib/whatsapp';
 
 describe('WhatsAppButton', () => {
-  it('aponta para o wa.me com número e mensagem do conteúdo', () => {
+  it('points to wa.me with the number and message from the content', () => {
     render(<WhatsAppButton />);
     expect(screen.getByRole('link')).toHaveAttribute(
       'href',
@@ -13,17 +13,17 @@ describe('WhatsAppButton', () => {
     );
   });
 
-  it('usa o rótulo padrão do conteúdo', () => {
+  it('uses the default label from the content', () => {
     render(<WhatsAppButton />);
     expect(screen.getByRole('link', { name: siteContent.whatsappCta })).toBeInTheDocument();
   });
 
-  it('aceita rótulo próprio', () => {
+  it('accepts a custom label', () => {
     render(<WhatsAppButton label="Falar agora" />);
     expect(screen.getByRole('link', { name: 'Falar agora' })).toBeInTheDocument();
   });
 
-  it('abre em nova aba de forma segura', () => {
+  it('opens in a new tab safely', () => {
     render(<WhatsAppButton />);
     const link = screen.getByRole('link');
     expect(link).toHaveAttribute('target', '_blank');

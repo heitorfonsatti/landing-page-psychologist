@@ -4,7 +4,7 @@ import { FinalCta } from '@/components/FinalCta';
 import { siteContent } from '@/content/site';
 
 describe('FinalCta', () => {
-  it('mostra a frase final e um botão de WhatsApp', () => {
+  it('shows the closing headline and a WhatsApp button', () => {
     render(<FinalCta />);
     expect(screen.getByText(siteContent.finalCta.headline)).toBeInTheDocument();
     expect(screen.getByRole('link')).toHaveAttribute(

@@ -4,32 +4,32 @@ import { Footer } from '@/components/Footer';
 import { siteContent } from '@/content/site';
 
 describe('Footer', () => {
-  it('traz nome completo, "Psicóloga" e CRP', () => {
+  it('shows the full name, "Psicóloga" and the CRP', () => {
     render(<Footer />);
     expect(screen.getByText(siteContent.fullName)).toBeInTheDocument();
     expect(screen.getByText(/Psicóloga/)).toBeInTheDocument();
     expect(screen.getByText(new RegExp(siteContent.crp.replace('/', '\/')))).toBeInTheDocument();
   });
 
-  it('traz o aviso de emergência com CVV e SAMU', () => {
+  it('shows the emergency notice with CVV and SAMU', () => {
     render(<Footer />);
     expect(screen.getByText(siteContent.footer.emergencyNotice)).toBeInTheDocument();
   });
 
-  it('traz o aviso de privacidade', () => {
+  it('shows the privacy notice', () => {
     render(<Footer />);
     expect(screen.getByText(siteContent.footer.privacyNotice)).toBeInTheDocument();
   });
 
-  it('lista as redes sociais do conteúdo', () => {
+  it('lists the social links from the content', () => {
     render(<Footer />);
-    for (const rede of siteContent.socialLinks) {
-      expect(screen.getByRole('link', { name: rede.label })).toHaveAttribute('href', rede.url);
+    for (const link of siteContent.socialLinks) {
+      expect(screen.getByRole('link', { name: link.label })).toHaveAttribute('href', link.url);
     }
   });
 
   // Review Focus 3
-  it('não renderiza lista nem rótulo de redes quando não há nenhuma', () => {
+  it('renders neither the list nor its label when there are no social links', () => {
     const { container } = render(<Footer socialLinks={[]} />);
     expect(container.querySelectorAll('ul')).toHaveLength(0);
     expect(screen.queryByText(/redes/i)).not.toBeInTheDocument();
