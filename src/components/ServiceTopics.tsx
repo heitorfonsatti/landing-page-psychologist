@@ -2,11 +2,17 @@
 
 import { useId, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
-import type { SiteContent } from '@/types/content';
+import type { ServiceItem } from '@/types/content';
 import { isFullyVisible, scrollToShow } from './PanelStack';
 import styles from './Services.module.css';
 
-type Props = Omit<SiteContent['services'], 'title'>;
+type Props = {
+  moreLabel: string;
+  backLabel: string;
+  struggleLabel: string;
+  supportLabel: string;
+  items: ServiceItem[];
+};
 
 const EASE = 'cubic-bezier(.22,.8,.24,1)';
 const GROW_MS = 620;

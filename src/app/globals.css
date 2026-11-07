@@ -8,6 +8,8 @@
 
   /* Accent color of the current panel: always the text color. Panels redefine it. */
   --ink: var(--brown);
+  /* Background color of the current panel. Panels redefine it. */
+  --surface: var(--beige);
 
   /* How much a covered panel's content fades at full coverage. */
   --fade-max: 0.55;
@@ -138,12 +140,14 @@ img {
   background-color: var(--beige);
   color: var(--brown);
   --ink: var(--brown);
+  --surface: var(--beige);
 }
 
 [data-color="brown"] {
   background-color: var(--brown);
   color: var(--beige);
   --ink: var(--beige);
+  --surface: var(--brown);
 }
 
 .stack-active [data-panel] {

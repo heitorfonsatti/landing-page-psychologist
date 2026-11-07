@@ -15,9 +15,10 @@ export default function Home() {
       <Header />
       <main id="inicio" className={styles.main}>
         <Hero />
-        <Services />
-        <About />
+        <Services audience="adults" />
+        <Services audience="children" />
         <HowItWorks />
+        <About />
         <Faq />
         <FinalCta />
       </main>

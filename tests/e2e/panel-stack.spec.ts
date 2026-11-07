@@ -1,7 +1,7 @@
 import { expect, test } from '@playwright/test';
 import { isLastTextReachable, panelSelector, waitForScrollToStop } from './panel-stack-helpers';
 
-const PANELS = ['hero', 'services', 'about', 'how-it-works', 'faq', 'final-cta'];
+const PANELS = ['hero', 'services', 'child-services', 'how-it-works', 'about', 'faq', 'final-cta'];
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');
@@ -30,12 +30,12 @@ test('the end of the FAQ is reachable with the longest answer open', async ({ pa
 test('the next panel covers the previous one', async ({ page }) => {
   const overlapped = await page.evaluate(() => {
     const services = document.querySelector('#servicos')!;
-    const about = document.querySelector('#sobre')!;
+    const next = document.querySelector('#infantojuvenil')!;
     const end = document.documentElement.scrollHeight;
     for (let y = 0; y <= end; y += 20) {
       window.scrollTo({ top: y, behavior: 'instant' });
       const a = services.getBoundingClientRect();
-      const b = about.getBoundingClientRect();
+      const b = next.getBoundingClientRect();
       // Adjacent panels in normal flow never overlap; only the stack does that.
       if (b.top > 0 && b.top < a.bottom - 10) {
         return true;
@@ -47,14 +47,14 @@ test('the next panel covers the previous one', async ({ page }) => {
 });
 
 test('the covered panel fades', async ({ page }) => {
-  // position where About already covers almost all of the visible part of Services
+  // position where the children's panel already covers almost all of the visible part of Services
   const y = await page.evaluate(() => {
-    const about = document.querySelector('#sobre')!;
+    const next = document.querySelector('#infantojuvenil')!;
     const headerBottom = document.querySelector('header')!.getBoundingClientRect().bottom;
     const end = document.documentElement.scrollHeight;
     for (let v = 0; v <= end; v += 10) {
       window.scrollTo({ top: v, behavior: 'instant' });
-      if (about.getBoundingClientRect().top <= headerBottom + 40) {
+      if (next.getBoundingClientRect().top <= headerBottom + 40) {
         return v;
       }
     }
