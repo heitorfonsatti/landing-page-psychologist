@@ -20,19 +20,36 @@ const validContent: SiteContent = {
     portrait: { src: '/images/portrait.png', alt: 'Marta sentada em uma poltrona', width: 800, height: 1000 },
   },
   services: {
-    title: 'Como posso ajudar',
     moreLabel: 'Saber mais',
     backLabel: 'Voltar',
-    struggleLabel: 'O que você pode estar vivendo',
     supportLabel: 'Como a terapia pode ajudar',
-    items: [
-      {
-        title: 'Ansiedade',
-        description: 'Quando a cabeça não desacelera.',
-        struggle: 'A preocupação ocupa muito espaço.',
-        support: 'Na terapia, treinamos novas respostas.',
-      },
-    ],
+    adults: {
+      eyebrow: 'Para adultos',
+      title: 'Como posso ajudar',
+      struggleLabel: 'O que você pode estar vivendo',
+      items: [
+        {
+          title: 'Ansiedade',
+          description: 'Quando a cabeça não desacelera.',
+          struggle: 'A preocupação ocupa muito espaço.',
+          support: 'Na terapia, treinamos novas respostas.',
+        },
+      ],
+    },
+    children: {
+      eyebrow: 'Para crianças e adolescentes',
+      title: 'Como posso ajudar na infância e na adolescência',
+      intro: 'Os responsáveis participam do processo.',
+      struggleLabel: 'O que você pode estar percebendo',
+      items: [
+        {
+          title: 'Medos',
+          description: 'Preocupações que crescem.',
+          struggle: 'A criança evita situações novas.',
+          support: 'Com brincadeiras, a criança enfrenta os medos aos poucos.',
+        },
+      ],
+    },
   },
   about: {
     title: 'Sobre mim',

@@ -1,6 +1,24 @@
-.services h2 {
-  max-width: 24ch;
+.heading {
   margin-bottom: 2.5rem;
+}
+
+.heading h2 {
+  max-width: 24ch;
+  margin-bottom: 0;
+}
+
+/* Names the audience above the title. */
+.eyebrow {
+  margin: 0 0 0.75rem;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.intro {
+  max-width: 56ch;
+  margin: 1.25rem 0 0;
 }
 
 /* Holds the cards and, when a topic is open, its full explanation. */
@@ -66,7 +84,7 @@
   width: 100%;
   overflow: hidden;
   padding: clamp(1.75rem, 4vw, 2.75rem);
-  background-color: color-mix(in srgb, var(--ink) 10%, var(--brown));
+  background-color: color-mix(in srgb, var(--ink) 10%, var(--surface));
   border-radius: var(--radius);
 }
 
@@ -88,7 +106,6 @@
   font-weight: 600;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  opacity: 0.8;
 }
 
 .detailText {

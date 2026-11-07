@@ -26,7 +26,7 @@ const EXPECTED_LINK = buildWhatsAppLink(
 
 const ANCHORS = [
   { name: 'Sobre mim', hash: '#sobre', heading: siteContent.about.title },
-  { name: 'Serviços', hash: '#servicos', heading: siteContent.services.title },
+  { name: 'Serviços', hash: '#servicos', heading: siteContent.services.adults.title },
   { name: 'Dúvidas', hash: '#duvidas', heading: siteContent.faq.title },
 ] as const;
 
@@ -128,18 +128,19 @@ test('panels alternate beige and brown, text always the opposite', async ({ page
     [BROWN, BEIGE],
     [BEIGE, BROWN],
     [BROWN, BEIGE],
+    [BEIGE, BROWN],
   ]);
 
   const footer = await page.$eval('footer', (f) => {
     const style = getComputedStyle(f);
     return [style.backgroundColor, style.color];
   });
-  expect(footer).toEqual([BEIGE, BROWN]);
+  expect(footer).toEqual([BROWN, BEIGE]);
 });
 
 // Review Focus 1: the focus ring must stay visible on a brown panel.
 test('focus ring is beige on a brown panel', async ({ page }) => {
-  const button = page.locator('main > [data-panel]').last().getByRole('link');
+  const button = page.locator('main > [data-panel][data-color="brown"]').first().getByRole('button').first();
   await page.keyboard.press('Tab');
   await button.focus();
   await expect(button).toBeFocused();
