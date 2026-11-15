@@ -38,10 +38,21 @@ describe('siteContent', () => {
 });
 
 describe('siteContent.services', () => {
-  it('has a full explanation, problem and support, for every topic', () => {
-    for (const item of siteContent.services.items) {
+  const { adults, children } = siteContent.services;
+
+  it.each([
+    ['adults', adults],
+    ['children', children],
+  ])('has a full explanation, problem and support, for every %s topic', (_, group) => {
+    expect(group.items.length).toBeGreaterThan(0);
+    for (const item of group.items) {
       expect(item.struggle.trim()).not.toBe('');
       expect(item.support.trim()).not.toBe('');
     }
+  });
+
+  it('never repeats a topic title, since titles name the "learn more" buttons', () => {
+    const titles = [...adults.items, ...children.items].map((i) => i.title);
+    expect(new Set(titles).size).toBe(titles.length);
   });
 });

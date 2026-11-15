@@ -1,4 +1,4 @@
-/* Brown panel: the button uses the light variant (beige with brown text). */
+/* Beige panel: the button uses the primary variant (brown with beige text). */
 .inner {
   display: flex;
   flex-direction: column;

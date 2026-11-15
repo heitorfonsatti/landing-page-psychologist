@@ -1,7 +1,7 @@
 import { expect, test, type Page } from '@playwright/test';
 import { isLastTextReachable, panelSelector } from './panel-stack-helpers';
 
-const PANEL_COUNT = 6;
+const PANEL_COUNT = 7;
 
 async function expectNoPanelSticks(page: Page): Promise<void> {
   const positions = await page.$$eval('main > [data-panel]', (panels) =>

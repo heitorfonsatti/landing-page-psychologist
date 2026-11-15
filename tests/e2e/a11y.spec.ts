@@ -69,11 +69,11 @@ test('the covering panel has no violations with scrolling stopped mid-coverage',
   await expect(page.locator('html')).toHaveClass(/stack-active/);
 
   const y = await page.evaluate(() => {
-    const about = document.querySelector('#sobre')!;
+    const next = document.querySelector('#infantojuvenil')!;
     const end = document.documentElement.scrollHeight;
     for (let v = 0; v <= end; v += 10) {
       window.scrollTo({ top: v, behavior: 'instant' });
-      if (about.getBoundingClientRect().top <= window.innerHeight / 2) {
+      if (next.getBoundingClientRect().top <= window.innerHeight / 2) {
         return v;
       }
     }
@@ -92,8 +92,8 @@ test('the covering panel has no violations with scrolling stopped mid-coverage',
   const { violations } = await axeWithoutCoveredText(page);
   expect(violations).toEqual([]);
   // Review Focus 5: the covering panel was really analyzed, not excluded.
-  expect(await page.locator('#sobre [data-axe-covered]').count()).toBeLessThan(
-    await page.locator('#sobre *').count(),
+  expect(await page.locator('#infantojuvenil [data-axe-covered]').count()).toBeLessThan(
+    await page.locator('#infantojuvenil *').count(),
   );
 });
 

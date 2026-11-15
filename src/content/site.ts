@@ -40,53 +40,123 @@ export const siteContent: SiteContent = {
   },
 
   services: {
-    title: 'Como posso ajudar',
     moreLabel: 'Saber mais',
     backLabel: 'Voltar',
-    struggleLabel: 'O que você pode estar vivendo',
     supportLabel: 'Como a terapia pode ajudar',
-    items: [
-      {
-        title: 'Ansiedade e preocupação constante',
-        description: 'Quando a cabeça não desacelera e o corpo parece viver em alerta.',
-        struggle:
-          'Talvez você passe o dia antecipando o que pode dar errado, durma mal ou sinta o peito apertado sem um motivo claro. A preocupação ocupa tanto espaço que sobra pouco para viver o agora.',
-        support:
-          'Na terapia, identificamos os pensamentos que alimentam esse estado de alerta e treinamos, aos poucos, novas formas de responder a eles. A ansiedade não some por decreto, mas pode voltar a ter um tamanho que cabe na sua rotina.',
-      },
-      {
-        title: 'Luto e perdas',
-        description: 'Para atravessar uma despedida sem precisar fazer isso sozinha.',
-        struggle:
-          'Perder alguém, ou algo importante, pode deixar tudo fora do lugar. A dor vem em ondas, às vezes acompanhada de culpa ou da sensação de que você já deveria estar melhor.',
-        support:
-          'A terapia é um lugar para dar nome ao que você sente, no seu tempo e sem cobrança. Não se trata de esquecer, e sim de encontrar um jeito de seguir carregando essa história com menos peso.',
-      },
-      {
-        title: 'Relações e limites',
-        description: 'Dificuldade de dizer não, conflitos que se repetem, medo de desagradar.',
-        struggle:
-          'Você diz sim quando queria dizer não, evita conversas difíceis ou percebe as mesmas brigas se repetindo com pessoas diferentes. Tentar agradar a todos acaba custando caro.',
-        support:
-          'Juntas, olhamos para os padrões que se repetem nas suas relações e praticamos formas de se posicionar com clareza e cuidado. Um limite saudável não afasta quem importa: aproxima.',
-      },
-      {
-        title: 'Autoestima e autocrítica',
-        description: 'A voz interna que cobra demais e reconhece de menos.',
-        struggle:
-          'Nada parece bom o bastante: cada conquista vira obrigação e cada erro vira prova de que você não dá conta. Essa voz crítica costuma falar mais alto do que qualquer elogio.',
-        support:
-          'Na terapia, aprendemos a reconhecer essa voz, questionar o que ela diz e construir um olhar mais justo sobre você mesma. Confiança em si se desenvolve, como qualquer outra habilidade.',
-      },
-      {
-        title: 'Transições de vida e de trabalho',
-        description: 'Mudanças de cidade, de carreira ou de fase que pedem tempo para assentar.',
-        struggle:
-          'Mudar de cidade, de emprego, encerrar um ciclo ou começar outro: mesmo as mudanças desejadas podem trazer insegurança, cansaço e a sensação de não pertencer a lugar nenhum.',
-        support:
-          'O acompanhamento ajuda a organizar o que está mudando, lidar com a incerteza e fazer escolhas com mais calma, com mais clareza sobre o que você quer daqui para frente.',
-      },
-    ],
+
+    adults: {
+      eyebrow: 'Para adultos',
+      title: 'Como posso ajudar',
+      struggleLabel: 'O que você pode estar vivendo',
+      items: [
+        {
+          title: 'Ansiedade e preocupação constante',
+          description: 'Quando a cabeça não desacelera e o corpo parece viver em alerta.',
+          struggle:
+            'Talvez você passe o dia antecipando o que pode dar errado, durma mal ou sinta o peito apertado sem um motivo claro. A preocupação ocupa tanto espaço que sobra pouco para viver o agora.',
+          support:
+            'Na terapia, identificamos os pensamentos que alimentam esse estado de alerta e treinamos, aos poucos, novas formas de responder a eles. A ansiedade não some por decreto, mas pode voltar a ter um tamanho que cabe na sua rotina.',
+        },
+        {
+          title: 'Autoestima e autocrítica',
+          description: 'A voz interna que cobra demais e reconhece de menos.',
+          struggle:
+            'Nada parece bom o bastante: cada conquista vira obrigação e cada erro vira prova de que você não dá conta. Essa voz crítica costuma falar mais alto do que qualquer elogio.',
+          support:
+            'Na terapia, aprendemos a reconhecer essa voz, questionar o que ela diz e construir um olhar mais justo sobre você mesma. Confiança em si se desenvolve, como qualquer outra habilidade.',
+        },
+        {
+          title: 'Perfeccionismo',
+          description: 'Padrões tão altos que o medo de errar trava o começo e rouba a satisfação.',
+          struggle:
+            'Você revisa tudo mais uma vez, adia o que não pode sair impecável e sente que só o resultado perfeito é aceitável. O cansaço cresce, e a sensação de dever cumprido quase nunca chega.',
+          support:
+            'Na terapia, identificamos as regras rígidas por trás dessa exigência e testamos, na prática, o que acontece quando você se permite fazer bem feito em vez de perfeito. Aos poucos, o padrão alto deixa de ser uma armadilha.',
+        },
+        {
+          title: 'Relações e limites',
+          description: 'Dificuldade de dizer não, conflitos que se repetem, medo de desagradar.',
+          struggle:
+            'Você diz sim quando queria dizer não, evita conversas difíceis ou percebe as mesmas brigas se repetindo com pessoas diferentes. Tentar agradar a todos acaba custando caro.',
+          support:
+            'Juntas, olhamos para os padrões que se repetem nas suas relações e praticamos formas de se posicionar com clareza e cuidado. Um limite saudável não afasta quem importa: aproxima.',
+        },
+        {
+          title: 'Relacionamentos amorosos',
+          description: 'Ciúme, términos, dependência emocional ou a dificuldade de se vincular.',
+          struggle:
+            'Talvez você sinta que se perde de si dentro de um relacionamento, viva com medo de ser deixada ou repita escolhas que já machucaram antes. Às vezes, o difícil é justamente se permitir criar um vínculo.',
+          support:
+            'Juntas, entendemos as crenças sobre o amor e sobre você mesma que guiam essas escolhas e praticamos formas mais seguras de se comunicar e de se vincular. Um relacionamento pode ser lugar de cuidado, e não de alerta.',
+        },
+        {
+          title: 'Relação com o corpo e a alimentação',
+          description: 'Quando a comida e a própria imagem pesam mais do que deveriam no dia a dia.',
+          struggle:
+            'Comer para aliviar emoções, seguir regras rígidas que nunca parecem suficientes, evitar situações por causa de como você se vê: a comida e o espelho viram fontes constantes de culpa e cobrança.',
+          support:
+            'Na terapia, observamos os pensamentos e as emoções que acompanham a comida e a imagem corporal e construímos, passo a passo, uma rotina mais flexível. A ideia é que o corpo deixe de ser um campo de batalha.',
+        },
+      ],
+    },
+
+    children: {
+      eyebrow: 'Para crianças e adolescentes',
+      title: 'Como posso ajudar na infância e na adolescência',
+      intro:
+        'Atendo crianças a partir de 6 anos e adolescentes. Os pais ou responsáveis participam do processo, com encontros periódicos de orientação.',
+      struggleLabel: 'O que você pode estar percebendo',
+      items: [
+        {
+          title: 'Medos, ansiedade e insegurança',
+          description: 'Preocupações que crescem, medo de ficar longe dos pais, dor de barriga antes da escola.',
+          struggle:
+            'A criança pode evitar situações novas, ter dificuldade para dormir sozinha ou sentir sintomas no corpo antes de provas e passeios. A preocupação parece maior do que ela consegue carregar.',
+          support:
+            'Com recursos adequados à idade, como brincadeiras, histórias e desenhos, a criança aprende a reconhecer o que sente e a enfrentar os medos aos poucos. Os pais recebem orientação para apoiar esse processo em casa.',
+        },
+        {
+          title: 'Birras, irritabilidade e emoções intensas',
+          description: 'Quando as emoções transbordam e as crises viram rotina em casa.',
+          struggle:
+            'Explosões por pequenas frustrações, choro difícil de acalmar, agressividade ou irritação constante. Em casa, todo mundo passa a pisar em ovos, e os pais se sentem sem saber como agir.',
+          support:
+            'Na terapia, a criança aprende a dar nome às emoções e a encontrar formas mais seguras de expressá-las. Com os pais, combinamos estratégias práticas e consistentes para os momentos de crise.',
+        },
+        {
+          title: 'Dificuldades na escola e com amigos',
+          description: 'Dificuldade para fazer amigos, conflitos com colegas ou resistência a ir para a escola.',
+          struggle:
+            'A criança ou o adolescente pode se isolar, ter conflitos frequentes com colegas, se recusar a ir à escola ou perder o interesse pelos estudos. Muitas vezes, é a própria escola quem percebe primeiro.',
+          support:
+            'Trabalhamos habilidades sociais, como puxar conversa, lidar com conflitos e pedir ajuda, e olhamos para o que está por trás da dificuldade escolar. Quando faz sentido, e com o acordo da família, a escola também participa do cuidado.',
+        },
+        {
+          title: 'Adolescência e seus desafios',
+          description: 'Autoestima, identidade, pressão do grupo e a vida nas redes sociais.',
+          struggle:
+            'O adolescente pode se fechar, mudar de humor com frequência, se comparar o tempo todo nas redes ou sentir que ninguém o entende. A conversa em casa fica difícil justamente quando mais se precisa dela.',
+          support:
+            'A terapia oferece ao adolescente um espaço próprio e de confiança para entender o que sente e lidar com as pressões dessa fase. Os responsáveis também recebem orientação, respeitando o vínculo construído com ele.',
+        },
+        {
+          title: 'Mudanças na família',
+          description: 'Separação dos pais, luto, mudança de casa ou a chegada de um irmão.',
+          struggle:
+            'Mudanças na família mexem com a rotina e com a sensação de segurança. A criança pode voltar a comportamentos que já tinha superado, ou ficar mais irritada, retraída ou preocupada.',
+          support:
+            'A terapia ajuda a criança a entender o que está acontecendo, em uma linguagem que faça sentido para ela, e a expressar o que sente. Os pais recebem apoio para conduzir essa fase com mais segurança.',
+        },
+        {
+          title: 'Orientação aos pais',
+          description: 'Apoio para quem cuida, com estratégias possíveis para o dia a dia.',
+          struggle:
+            'Você sente que já tentou de tudo, se divide entre limite e afeto ou tem dúvidas sobre como reagir a certos comportamentos. Educar cansa, e nem sempre há com quem conversar sobre isso.',
+          support:
+            'Nos encontros de orientação, entendemos juntos o que mantém os comportamentos difíceis e combinamos estratégias práticas para a rotina da família. A orientação pode acompanhar a terapia da criança ou acontecer de forma independente.',
+        },
+      ],
+    },
   },
 
   about: {

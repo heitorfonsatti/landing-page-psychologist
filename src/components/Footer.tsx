@@ -12,9 +12,9 @@ export function Footer({ socialLinks = siteContent.socialLinks }: Props) {
   const { fullName, profession, crp, footer } = siteContent;
 
   return (
-    <footer className={styles.footer} data-color="beige">
+    <footer className={styles.footer} data-color="brown">
       <div className={`${styles.inner} container`}>
-        <Image className={styles.logo} src="/images/logo.png" alt="" width={240} height={215} />
+        <Image className={styles.logo} src="/images/logo-light.png" alt="" width={240} height={215} />
 
         <div className={styles.identity}>
           <span className={styles.name}>{fullName}</span>

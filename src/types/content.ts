@@ -8,6 +8,17 @@ export type ServiceItem = ListItem & {
   /** How therapy can help: shows there is a way forward. */
   support: string;
 };
+/** One audience's "How I can help" section. */
+export type ServiceGroup = {
+  /** Small label above the title that names the audience. */
+  eyebrow: string;
+  title: string;
+  /** Optional short paragraph below the title. */
+  intro?: string;
+  /** Label above `struggle`; changes with who reads it (the patient or the parents). */
+  struggleLabel: string;
+  items: ServiceItem[];
+};
 export type FaqItem = { question: string; answer: string };
 
 export type SiteContent = {
@@ -20,12 +31,11 @@ export type SiteContent = {
   seo: { title: string; description: string; siteUrl: string };
   hero: { headline: string; modality: string; portrait: Photo };
   services: {
-    title: string;
     moreLabel: string;
     backLabel: string;
-    struggleLabel: string;
     supportLabel: string;
-    items: ServiceItem[];
+    adults: ServiceGroup;
+    children: ServiceGroup;
   };
   about: {
     title: string;
