@@ -1,0 +1,292 @@
+/* Street map in the panel colors: streets in tints of the ink over a land one
+   step lighter than the panel. On the brown footer that is beige on brown. */
+.map {
+  --map-land: color-mix(in oklab, var(--ink) 7%, var(--surface));
+  --map-green: color-mix(in oklab, var(--ink) 13%, var(--surface));
+  --map-minor: color-mix(in oklab, var(--ink) 20%, var(--surface));
+  --map-street: color-mix(in oklab, var(--ink) 30%, var(--surface));
+  --map-major: color-mix(in oklab, var(--ink) 44%, var(--surface));
+  --map-label: color-mix(in oklab, var(--ink) 85%, var(--surface));
+
+  position: relative;
+  overflow: hidden;
+  container-type: inline-size;
+  aspect-ratio: 4 / 3;
+  border-radius: var(--radius-large);
+  background-color: var(--map-land);
+  border: 1px solid color-mix(in oklab, var(--ink) 18%, transparent);
+}
+
+/* --k (set by the zoom) is the view's width over the neighbourhood view's;
+   --zw widens the streets as the view closes in. */
+.svg {
+  --k: 1;
+  --zw: 1;
+  --type: 32px;
+
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  /* Map type is set in map units (metres), so its size follows the map's
+     width and the zoom; these steps keep it near 12px on screen. */
+  font-size: calc(var(--type) * var(--k));
+}
+
+@container (min-width: 30rem) {
+  .svg {
+    --type: 22px;
+  }
+}
+
+@container (min-width: 42rem) {
+  .svg {
+    --type: 16px;
+  }
+}
+
+.land {
+  fill: var(--map-land);
+}
+
+.green {
+  fill: var(--map-green);
+  fill-rule: evenodd;
+}
+
+/* Line widths are screen pixels whatever the map's size. */
+.rail,
+.path,
+.minor,
+.street,
+.major {
+  fill: none;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  vector-effect: non-scaling-stroke;
+}
+
+.rail {
+  stroke: var(--map-street);
+  stroke-width: 1.5px;
+}
+
+.path {
+  stroke: var(--map-minor);
+  stroke-width: 1px;
+  stroke-dasharray: 3 2;
+}
+
+.minor {
+  stroke: var(--map-minor);
+  stroke-width: calc(2.5px * var(--zw));
+}
+
+.street {
+  stroke: var(--map-street);
+  stroke-width: calc(4.5px * var(--zw));
+}
+
+.major {
+  stroke: var(--map-major);
+  stroke-width: calc(7px * var(--zw));
+}
+
+/* Names for one view at a time: the neighbourhood's landmarks, or the block's. */
+.far,
+.near {
+  transition:
+    opacity 300ms ease,
+    visibility 300ms;
+}
+
+.map[data-zoom="far"] .near,
+.map[data-zoom="near"] .far {
+  opacity: 0;
+  visibility: hidden;
+}
+
+.label,
+.landmarkName {
+  font-family: var(--font-body);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  fill: var(--map-label);
+  stroke: var(--map-land);
+  stroke-width: 0.3em;
+  stroke-linejoin: round;
+  paint-order: stroke;
+  user-select: none;
+}
+
+/* Street names a little quieter than the landmarks. */
+.label {
+  font-size: 0.92em;
+  fill: color-mix(in oklab, var(--ink) 70%, var(--surface));
+}
+
+.landmark circle {
+  r: 0.32em;
+  fill: var(--map-land);
+  stroke: var(--map-label);
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+}
+
+/* The pin, in the middle of the frame (every view is centred on the office). */
+.pin {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+}
+
+.dot {
+  position: absolute;
+  left: -0.6875rem;
+  top: -0.6875rem;
+  width: 1.375rem;
+  height: 1.375rem;
+  border-radius: 50%;
+  background-color: var(--ink);
+  border: 4px solid var(--surface);
+  box-shadow: 0 0 0 1px var(--ink);
+}
+
+.halo {
+  position: absolute;
+  left: -2.25rem;
+  top: -2.25rem;
+  width: 4.5rem;
+  height: 4.5rem;
+  border-radius: 50%;
+  background: radial-gradient(closest-side, color-mix(in oklab, var(--ink) 35%, transparent), transparent);
+}
+
+/* Neighbourhood view: on a phone, right of the pin on two lines, where no
+   name sits; on a wider map, below the pin and centred. Block view: up and to
+   the right, the one side the street and its neighbours leave free. */
+.tag {
+  position: absolute;
+  left: 1.25rem;
+  top: 0;
+  translate: 0 -50%;
+  width: max-content;
+  max-width: 8.5rem;
+  padding: 0.3125rem 0.625rem;
+  border-radius: 0.75rem;
+  line-height: 1.2;
+  background-color: var(--ink);
+  color: var(--surface);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  transition:
+    left 300ms ease,
+    top 300ms ease,
+    translate 300ms ease;
+}
+
+@container (min-width: 30rem) {
+  .tag {
+    left: 0;
+    top: 1.125rem;
+    translate: -50% 0;
+    max-width: none;
+    padding: 0.375rem 0.75rem;
+    border-radius: 999px;
+    white-space: nowrap;
+    font-size: 0.875rem;
+  }
+}
+
+.map[data-zoom="near"] .tag {
+  left: 0.75rem;
+  top: -0.75rem;
+  translate: 0 -100%;
+}
+
+/* Pointed at, the halo answers once; so does it while a link in the block
+   that holds the map (marked data-map-group) is hovered or focused. */
+.map:hover .halo,
+:global([data-map-group]):has(a:hover, a:focus-visible) .halo {
+  animation: map-halo 1.2s ease 1;
+}
+
+@keyframes map-halo {
+  0%,
+  100% {
+    scale: 1;
+    opacity: 1;
+  }
+
+  45% {
+    scale: 1.6;
+    opacity: 0.35;
+  }
+}
+
+/* Zoom buttons, side by side in the bottom right corner (low, so they stay
+   clear of the names). */
+.controls {
+  position: absolute;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  display: flex;
+  flex-direction: row-reverse;
+  overflow: hidden;
+  border-radius: 999px;
+  background-color: var(--ink);
+  box-shadow: 0 0 0 1px color-mix(in oklab, var(--surface) 20%, transparent);
+}
+
+.control {
+  display: grid;
+  place-items: center;
+  width: 2.75rem;
+  height: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: var(--surface);
+  cursor: pointer;
+  transition:
+    background-color 180ms ease,
+    scale 120ms ease;
+}
+
+.control + .control {
+  border-right: 1px solid color-mix(in oklab, var(--surface) 25%, transparent);
+}
+
+.control svg {
+  width: 1rem;
+  height: 1rem;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+}
+
+@media (hover: hover) {
+  .control:not(:disabled):hover {
+    background-color: color-mix(in oklab, var(--surface) 12%, transparent);
+  }
+}
+
+.control:not(:disabled):active {
+  scale: 0.92;
+}
+
+.control:disabled {
+  cursor: default;
+  color: color-mix(in oklab, var(--surface) 40%, var(--ink));
+}
+
+/* The focus ring sits inside the button, so the round group cannot clip it. */
+.control:focus-visible {
+  outline: 3px solid var(--surface);
+  outline-offset: -5px;
+  border-radius: 999px;
+}

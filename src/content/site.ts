@@ -25,13 +25,13 @@ export const siteContent: SiteContent = {
   seo: {
     title: 'Ana Beatriz Moraes — Psicóloga',
     description:
-      'Psicóloga clínica. Atendimento online para adultos em todo o Brasil e presencial para crianças e adolescentes. O primeiro contato acontece pelo WhatsApp.',
+      'Psicóloga clínica em Arapongas (PR). Atendimento presencial para adultos, crianças e adolescentes, e online para adultos em todo o Brasil. O primeiro contato acontece pelo WhatsApp.',
     siteUrl: 'https://exemplo.com.br',
   },
 
   hero: {
     headline: 'Um espaço para você se escutar com calma',
-    modality: 'Online para adultos, em todo o Brasil. Presencial para crianças e adolescentes, no consultório.',
+    modality: 'Presencial em Arapongas (PR) para adultos, crianças e adolescentes. Online para adultos, em todo o Brasil.',
     portrait: {
       src: '/images/portrait.png',
       alt: 'Ana Beatriz Moraes sentada em uma poltrona clara, olhando para a câmera',
@@ -224,7 +224,7 @@ export const siteContent: SiteContent = {
       {
         question: 'Como é o atendimento online?',
         answer:
-          'O atendimento online é para adultos. Acontece por videochamada, em horário combinado, de um lugar onde você possa falar com privacidade. Você precisa de internet estável e, se preferir, de fones de ouvido.',
+          'O atendimento online é para adultos, como alternativa às sessões no consultório. Acontece por videochamada, em horário combinado, de um lugar onde você possa falar com privacidade. Você precisa de internet estável e, se preferir, de fones de ouvido.',
       },
       {
         question: 'Como faço para saber os valores?',
@@ -243,6 +243,16 @@ export const siteContent: SiteContent = {
       'Este site não usa cookies de rastreamento e não tem formulários — nenhum dado seu é coletado aqui. O contato acontece diretamente no WhatsApp.',
     emergencyNotice:
       'Este site não atende emergências. Em situação de risco imediato, ligue para o CVV no 188 ou para o SAMU no 192.',
+  },
+
+  office: {
+    heading: 'Consultório',
+    place: 'Clínica Gabriela Medeiros',
+    street: 'Rua Pombas, 212',
+    district: 'Centro',
+    city: 'Arapongas',
+    state: 'PR',
+    note: 'Atendimento presencial para adultos, crianças e adolescentes.',
   },
 
   socialLinks: [{ label: 'Instagram', url: 'https://www.instagram.com/exemplo' }],

@@ -4,8 +4,21 @@
 
 .inner {
   display: grid;
+  gap: clamp(2rem, 4vw, 3rem);
+}
+
+/* Logo and identity on the left, social links on the right. */
+.top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
   gap: 1.5rem;
-  max-width: 60rem;
+}
+
+.brand {
+  display: grid;
+  gap: 1rem;
 }
 
 .logo {
@@ -40,6 +53,127 @@
   text-underline-offset: 0.25em;
 }
 
+/* The office: address and map links beside the street map; stacked, text
+   first, on narrow screens. */
+.office {
+  display: grid;
+  gap: 1.75rem;
+  padding-top: clamp(2rem, 4vw, 3rem);
+  border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+}
+
+@media (min-width: 56rem) {
+  .office {
+    grid-template-columns: minmax(0, 5fr) minmax(0, 7fr);
+    align-items: center;
+    gap: clamp(2rem, 5vw, 4rem);
+  }
+}
+
+.officeText {
+  display: grid;
+  gap: 1rem;
+  justify-items: start;
+}
+
+.officeHeading {
+  margin: 0;
+  font-family: var(--font-body);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.address {
+  display: grid;
+  font-style: normal;
+  font-size: 1.0625rem;
+}
+
+.place {
+  font-size: 1.0625rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+}
+
+.street {
+  font-family: var(--font-heading);
+  font-size: clamp(1.75rem, 4vw, 2.5rem);
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+}
+
+.note {
+  margin: 0;
+  max-width: 34ch;
+  font-size: 0.9375rem;
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: 0.5rem;
+}
+
+/* Same pill as the WhatsApp button: steps up under the pointer, presses in on click. */
+.action {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 2.75rem;
+  padding: 0.625rem 1.25rem;
+  border-radius: 999px;
+  border: 1px solid var(--ink);
+  font-size: 0.9375rem;
+  font-weight: 600;
+  line-height: 1.2;
+  text-decoration: none;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    translate 180ms ease,
+    scale 120ms ease;
+}
+
+.actionMain {
+  background-color: var(--ink);
+  color: var(--surface);
+}
+
+@media (hover: hover) {
+  .action:hover {
+    translate: 0 -1px;
+    background-color: color-mix(in srgb, var(--ink) 12%, transparent);
+  }
+
+  .actionMain:hover {
+    background-color: var(--ink);
+    color: var(--dark-brown);
+  }
+}
+
+.action:active {
+  translate: 0 0;
+  scale: 0.97;
+}
+
+@media (max-width: 30rem) {
+  .actions {
+    width: 100%;
+  }
+
+  .action {
+    flex: 1 1 100%;
+  }
+}
+
+.notes {
+  display: grid;
+  gap: 1.25rem;
+}
+
 .emergency {
   margin: 0;
   padding: 1rem 1.25rem;
@@ -54,4 +188,10 @@
   font-size: 0.875rem;
   opacity: 0.9;
   max-width: 62ch;
+}
+
+.credit {
+  margin: 0;
+  font-size: 0.8125rem;
+  opacity: 0.8;
 }
