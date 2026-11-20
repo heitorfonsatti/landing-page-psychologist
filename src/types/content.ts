@@ -18,6 +18,8 @@ export type ServiceGroup = {
   /** Label above `struggle`; changes with who reads it (the patient or the parents). */
   struggleLabel: string;
   items: ServiceItem[];
+  /** Optional photo beside the topics (used by the list layout). */
+  photo?: Photo;
 };
 export type FaqItem = { question: string; answer: string };
 
@@ -27,7 +29,10 @@ export type SiteContent = {
   crp: string;
   whatsappNumber: string;
   whatsappMessage: string;
+  /** Button text; names WhatsApp so visitors know where the click leads. */
   whatsappCta: string;
+  /** Shorter button text for the header, where the full one does not fit on phones. */
+  whatsappShortCta: string;
   seo: { title: string; description: string; siteUrl: string };
   hero: { headline: string; modality: string; portrait: Photo };
   services: {

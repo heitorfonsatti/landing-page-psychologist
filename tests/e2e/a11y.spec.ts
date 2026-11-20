@@ -35,8 +35,17 @@ async function axeWithoutCoveredText(page: Page) {
     .analyze();
 }
 
+/**
+ * Opens the page and waits for the hero entrance to end: axe measures the
+ * page at rest, not text that is still fading in on load.
+ */
+async function gotoAtRest(page: Page, url: string) {
+  await page.goto(url);
+  await page.evaluate(() => Promise.all(document.getAnimations().map((a) => a.finished)));
+}
+
 test('no WCAG A and AA violations', async ({ page }) => {
-  await page.goto('/');
+  await gotoAtRest(page, '/');
   const { violations } = await new AxeBuilder({ page }).withTags(WCAG_TAGS).analyze();
   expect(violations).toEqual([]);
 });
@@ -45,7 +54,7 @@ test('no WCAG A and AA violations', async ({ page }) => {
 // exclusive accordion only one is open at a time, so each one is opened and
 // checked separately.
 test('no violations with each FAQ answer open, one at a time', async ({ page }) => {
-  await page.goto('/');
+  await gotoAtRest(page, '/');
   const summaries = page.locator('#duvidas summary');
   const total = await summaries.count();
   expect(total).toBeGreaterThan(0);
@@ -65,7 +74,7 @@ test('no violations with each FAQ answer open, one at a time', async ({ page }) 
 // the screen. The panel above is fading (excluded); the covering panel must
 // still pass.
 test('the covering panel has no violations with scrolling stopped mid-coverage', async ({ page }) => {
-  await page.goto('/');
+  await gotoAtRest(page, '/');
   await expect(page.locator('html')).toHaveClass(/stack-active/);
 
   const y = await page.evaluate(() => {

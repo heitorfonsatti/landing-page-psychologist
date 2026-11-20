@@ -11,7 +11,29 @@
   line-height: 1.2;
   text-align: center;
   text-decoration: none;
-  transition: background-color 180ms ease, color 180ms ease;
+  transition:
+    background-color 180ms ease,
+    color 180ms ease,
+    translate 180ms ease,
+    scale 120ms ease;
+}
+
+/* Steps up a little under the pointer and presses in on click. */
+@media (hover: hover) {
+  .button:hover {
+    translate: 0 -1px;
+  }
+}
+
+.button:active {
+  translate: 0 0;
+  scale: 0.97;
+}
+
+.icon {
+  flex-shrink: 0;
+  width: 1.15em;
+  height: 1.15em;
 }
 
 .primary {

@@ -3,9 +3,13 @@ import { siteContent } from '@/content/site';
 import { WhatsAppButton } from './WhatsAppButton';
 import styles from './Header.module.css';
 
+/* In page order. "Como funciona" is left out on purpose: it is a short
+   step-by-step that the visitor reaches by scrolling, and a fifth link would
+   wrap the menu to a third row on phones. */
 const LINKS = [
+  { label: 'Adultos', href: '#servicos' },
+  { label: 'Infantojuvenil', href: '#infantojuvenil' },
   { label: 'Sobre mim', href: '#sobre' },
-  { label: 'Serviços', href: '#servicos' },
   { label: 'Dúvidas', href: '#duvidas' },
 ] as const;
 
@@ -32,7 +36,8 @@ export function Header() {
           </ul>
         </nav>
 
-        <WhatsAppButton className={styles.button} />
+        {/* Short label: the full one does not fit next to the name on phones. */}
+        <WhatsAppButton className={styles.button} label={siteContent.whatsappShortCta} />
       </div>
     </header>
   );

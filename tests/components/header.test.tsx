@@ -10,17 +10,25 @@ describe('Header', () => {
   });
 
   it.each([
+    ['Adultos', '#servicos'],
+    ['Infantojuvenil', '#infantojuvenil'],
     ['Sobre mim', '#sobre'],
-    ['Serviços', '#servicos'],
     ['Dúvidas', '#duvidas'],
   ])('links %s to the %s anchor', (name, href) => {
     render(<Header />);
     expect(screen.getByRole('link', { name })).toHaveAttribute('href', href);
   });
 
-  it('has the WhatsApp button', () => {
+  it('lists the section links in page order', () => {
     render(<Header />);
-    expect(screen.getByRole('link', { name: siteContent.whatsappCta })).toHaveAttribute(
+    const nav = screen.getByRole('navigation');
+    const hrefs = [...nav.querySelectorAll('a')].map((a) => a.getAttribute('href'));
+    expect(hrefs).toEqual(['#servicos', '#infantojuvenil', '#sobre', '#duvidas']);
+  });
+
+  it('has the WhatsApp button, with the short label', () => {
+    render(<Header />);
+    expect(screen.getByRole('link', { name: siteContent.whatsappShortCta })).toHaveAttribute(
       'href',
       expect.stringContaining('https://wa.me/'),
     );

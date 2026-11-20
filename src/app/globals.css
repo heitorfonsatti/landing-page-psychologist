@@ -13,6 +13,8 @@
 
   /* How much a covered panel's content fades at full coverage. */
   --fade-max: 0.55;
+  /* How much a covered panel shrinks at full coverage (0.04 = to 96%). */
+  --depth-max: 0.04;
 
   --font-heading: var(--font-fraunces), Georgia, "Times New Roman", serif;
   --font-body: var(--font-source-sans), system-ui, -apple-system, "Segoe UI", sans-serif;
@@ -169,6 +171,17 @@ img {
    rest and the covering panel keep full contrast. */
 .stack-active [data-panel] > * {
   opacity: calc(1 - var(--fade-max) * var(--coverage, 0));
+}
+
+/* Depth: while it is covered, a panel also shrinks a little and rounds its
+   corners, like a sheet slipping under the next one. It shrinks toward its
+   bottom edge, which sits under the incoming panel, so no gap opens between
+   the two. Driven by the same --coverage as the fade, so it follows the
+   scroll exactly and rests at full size. */
+.stack-active [data-panel] {
+  scale: calc(1 - var(--depth-max) * var(--coverage, 0));
+  transform-origin: 50% 100%;
+  border-radius: calc(var(--radius-large) * var(--coverage, 0));
 }
 
 @media (prefers-reduced-motion: reduce) {

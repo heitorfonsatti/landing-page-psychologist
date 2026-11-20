@@ -19,18 +19,19 @@ export const siteContent: SiteContent = {
   crp: '00/00000',
   whatsappNumber: '5511999999999',
   whatsappMessage: 'Olá! Vim pelo site e gostaria de saber mais sobre o atendimento.',
-  whatsappCta: 'Diga um oie!',
+  whatsappCta: 'Diga um oi no WhatsApp',
+  whatsappShortCta: 'WhatsApp',
 
   seo: {
     title: 'Ana Beatriz Moraes — Psicóloga',
     description:
-      'Psicóloga clínica, atendimento online para adultos em todo o Brasil. O primeiro contato acontece pelo WhatsApp.',
+      'Psicóloga clínica. Atendimento online para adultos em todo o Brasil e presencial para crianças e adolescentes. O primeiro contato acontece pelo WhatsApp.',
     siteUrl: 'https://exemplo.com.br',
   },
 
   hero: {
     headline: 'Um espaço para você se escutar com calma',
-    modality: 'Atendimento online, para adultos em todo o Brasil',
+    modality: 'Online para adultos, em todo o Brasil. Presencial para crianças e adolescentes, no consultório.',
     portrait: {
       src: '/images/portrait.png',
       alt: 'Ana Beatriz Moraes sentada em uma poltrona clara, olhando para a câmera',
@@ -104,8 +105,14 @@ export const siteContent: SiteContent = {
       eyebrow: 'Para crianças e adolescentes',
       title: 'Como posso ajudar na infância e na adolescência',
       intro:
-        'Atendo crianças a partir de 6 anos e adolescentes. Os pais ou responsáveis participam do processo, com encontros periódicos de orientação.',
+        'Atendo crianças a partir de 6 anos e adolescentes presencialmente, no consultório. Os pais ou responsáveis participam do processo, com encontros periódicos de orientação.',
       struggleLabel: 'O que você pode estar percebendo',
+      photo: {
+        src: '/images/office.png',
+        alt: 'Consultório com tapete, mesa baixa, brinquedos e livros infantis em uma estante',
+        width: 800,
+        height: 600,
+      },
       items: [
         {
           title: 'Medos, ansiedade e insegurança',
@@ -162,7 +169,7 @@ export const siteContent: SiteContent = {
   about: {
     title: 'Sobre mim',
     paragraphs: [
-      'Sou psicóloga clínica e atendo adultos que querem entender melhor o que sentem. Meu trabalho começa pela escuta: antes de qualquer proposta, quero compreender como a sua história chegou até aqui.',
+      'Sou psicóloga clínica e atendo adultos, crianças e adolescentes que querem entender melhor o que sentem. Meu trabalho começa pela escuta: antes de qualquer proposta, quero compreender como a sua história chegou até aqui.',
       'Acredito em um espaço sem pressa e sem julgamento, onde você possa falar daquilo que ainda não tem nome. O ritmo é combinado com você, sessão por sessão.',
     ],
     education: [
@@ -217,7 +224,7 @@ export const siteContent: SiteContent = {
       {
         question: 'Como é o atendimento online?',
         answer:
-          'Acontece por videochamada, em horário combinado, de um lugar onde você possa falar com privacidade. Você precisa de internet estável e, se preferir, de fones de ouvido.',
+          'O atendimento online é para adultos. Acontece por videochamada, em horário combinado, de um lugar onde você possa falar com privacidade. Você precisa de internet estável e, se preferir, de fones de ouvido.',
       },
       {
         question: 'Como faço para saber os valores?',

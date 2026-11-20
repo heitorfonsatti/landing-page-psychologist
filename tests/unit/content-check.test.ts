@@ -8,7 +8,8 @@ const validContent: SiteContent = {
   crp: '06/12345',
   whatsappNumber: '5511987654321',
   whatsappMessage: 'Olá! Vim pelo site e gostaria de saber mais sobre o atendimento.',
-  whatsappCta: 'Diga um oie!',
+  whatsappCta: 'Diga um oi no WhatsApp',
+  whatsappShortCta: 'WhatsApp',
   seo: {
     title: 'Marta Ribeiro Lemos — Psicóloga',
     description: 'Atendimento online para adultos.',
