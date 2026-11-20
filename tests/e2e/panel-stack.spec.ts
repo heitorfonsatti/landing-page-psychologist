@@ -76,7 +76,7 @@ test('an anchor clicked from the bottom up lands on the heading', async ({ page 
   await page.evaluate(() =>
     window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }),
   );
-  await page.locator('header').getByRole('link', { name: 'Serviços', exact: true }).click();
+  await page.locator('header').getByRole('link', { name: 'Adultos', exact: true }).click();
   await waitForScrollToStop(page);
 
   const r = await page.evaluate(() => {
@@ -202,7 +202,7 @@ test('after activating an anchor, the next Tab goes into the section', async ({ 
   await page.evaluate(() =>
     window.scrollTo({ top: document.documentElement.scrollHeight, behavior: 'instant' }),
   );
-  await page.locator('header').getByRole('link', { name: 'Serviços', exact: true }).press('Enter');
+  await page.locator('header').getByRole('link', { name: 'Adultos', exact: true }).press('Enter');
   await waitForScrollToStop(page);
   await expect(page.locator(':target')).toHaveAttribute('id', 'servicos');
   await page.keyboard.press('Tab');

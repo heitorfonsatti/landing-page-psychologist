@@ -27,7 +27,10 @@ export type SiteContent = {
   crp: string;
   whatsappNumber: string;
   whatsappMessage: string;
+  /** Button text; names WhatsApp so visitors know where the click leads. */
   whatsappCta: string;
+  /** Shorter button text for the header, where the full one does not fit on phones. */
+  whatsappShortCta: string;
   seo: { title: string; description: string; siteUrl: string };
   hero: { headline: string; modality: string; portrait: Photo };
   services: {

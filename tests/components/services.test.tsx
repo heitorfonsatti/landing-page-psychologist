@@ -33,7 +33,8 @@ describe.each([
     render(<Services audience={audience} />);
     expect(screen.getAllByRole('listitem')).toHaveLength(group.items.length);
     for (const item of group.items) {
-      expect(screen.getByText(item.title)).toBeInTheDocument();
+      // By role: the hidden explanations repeat each title, outside the accessibility tree.
+      expect(screen.getByRole('heading', { level: 3, name: item.title })).toBeInTheDocument();
     }
   });
 
@@ -41,7 +42,8 @@ describe.each([
     const topic = group.items[0]!;
     render(<Services audience={audience} />);
     await userEvent.click(moreButton(topic.title));
-    expect(screen.getByText(group.struggleLabel)).toBeInTheDocument();
+    const detail = screen.getByRole('article', { name: topic.title });
+    expect(within(detail).getByText(group.struggleLabel)).toBeInTheDocument();
   });
 });
 
@@ -64,7 +66,15 @@ describe('Services topics', () => {
   it('starts with no topic expanded', () => {
     render(<Services audience="adults" />);
     expect(screen.queryByRole('article')).not.toBeInTheDocument();
-    expect(screen.queryByText(first.struggle)).not.toBeInTheDocument();
+    expect(screen.getByText(first.struggle)).not.toBeVisible();
+  });
+
+  it('puts every full explanation in the HTML from the start, so search engines index it', () => {
+    const { container } = render(<Services audience="adults" />);
+    for (const item of adults.items) {
+      expect(container).toHaveTextContent(item.struggle);
+      expect(container).toHaveTextContent(item.support);
+    }
   });
 
   it('shows only the chosen topic, with its full explanation, after "learn more"', async () => {

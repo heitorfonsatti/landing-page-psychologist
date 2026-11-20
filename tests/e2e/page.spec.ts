@@ -25,10 +25,21 @@ const EXPECTED_LINK = buildWhatsAppLink(
 );
 
 const ANCHORS = [
+  { name: 'Adultos', hash: '#servicos', heading: siteContent.services.adults.title },
+  { name: 'Infantojuvenil', hash: '#infantojuvenil', heading: siteContent.services.children.title },
   { name: 'Sobre mim', hash: '#sobre', heading: siteContent.about.title },
-  { name: 'Serviços', hash: '#servicos', heading: siteContent.services.adults.title },
   { name: 'Dúvidas', hash: '#duvidas', heading: siteContent.faq.title },
 ] as const;
+
+test('the served HTML carries every topic explanation, before any click', async ({ request }) => {
+  const html = await (await request.get('/')).text();
+  const { adults, children } = siteContent.services;
+  for (const item of [...adults.items, ...children.items]) {
+    // React escapes quotes in text; the explanations hold none, so a plain search is enough.
+    expect(html).toContain(item.struggle);
+    expect(html).toContain(item.support);
+  }
+});
 
 test.beforeEach(async ({ page }) => {
   await page.goto('/');

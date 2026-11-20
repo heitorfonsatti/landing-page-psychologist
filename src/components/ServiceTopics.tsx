@@ -70,7 +70,6 @@ function boxIn(frame: HTMLElement, el: HTMLElement): Box {
  */
 export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabel, items }: Props) {
   const id = useId();
-  const titleId = `${id}-title`;
 
   /** Topic whose explanation is rendered (also while it grows or shrinks). */
   const [active, setActive] = useState<number | null>(null);
@@ -78,9 +77,9 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
   const [expanded, setExpanded] = useState(false);
 
   const frameRef = useRef<HTMLDivElement>(null);
-  const detailRef = useRef<HTMLElement>(null);
-  const contentRef = useRef<HTMLDivElement>(null);
-  const backRef = useRef<HTMLButtonElement>(null);
+  const detailRefs = useRef<(HTMLElement | null)[]>([]);
+  const contentRefs = useRef<(HTMLDivElement | null)[]>([]);
+  const backRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const cardRefs = useRef<(HTMLLIElement | null)[]>([]);
   const moreRefs = useRef<(HTMLButtonElement | null)[]>([]);
   const busy = useRef(false);
@@ -98,8 +97,8 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
       const from = boxIn(frame, card);
       // Renders the explanation, still absolutely positioned over the grid.
       flushSync(() => setActive(index));
-      const detail = detailRef.current!;
-      const content = contentRef.current!;
+      const detail = detailRefs.current[index]!;
+      const content = contentRefs.current[index]!;
       const to: Box = { top: 0, left: 0, width: frame.clientWidth, height: detail.offsetHeight };
 
       // Starts scrolling while it grows, aiming at the frame's final size, so
@@ -149,16 +148,19 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
       frame.getAnimations({ subtree: true }).forEach((a) => a.cancel());
     }
     reveal(frame);
-    backRef.current?.focus({ preventScroll: true });
+    backRefs.current[index]?.focus({ preventScroll: true });
     busy.current = false;
   };
 
   const close = async () => {
     const frame = frameRef.current;
-    const detail = detailRef.current;
-    const content = contentRef.current;
     const index = active;
-    if (busy.current || !frame || !detail || !content || index === null) {
+    if (index === null) {
+      return;
+    }
+    const detail = detailRefs.current[index];
+    const content = contentRefs.current[index];
+    if (busy.current || !frame || !detail || !content) {
       return;
     }
     const card = cardRefs.current[index];
@@ -208,8 +210,6 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
     busy.current = false;
   };
 
-  const current = active === null ? null : items[active];
-
   return (
     <div ref={frameRef} className={styles.frame} data-expanded={expanded || undefined}>
       <ul className={styles.list} hidden={expanded}>
@@ -239,23 +239,48 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
         ))}
       </ul>
 
-      {current && (
-        <article ref={detailRef} className={styles.detail} aria-labelledby={titleId}>
-          <div ref={contentRef} className={styles.detailContent}>
-            <button ref={backRef} type="button" className={styles.link} onClick={() => void close()}>
-              <span aria-hidden="true">← </span>
-              {backLabel}
-            </button>
-            <h3 id={titleId} className={styles.detailTitle}>
-              {current.title}
-            </h3>
-            <p className={styles.detailLabel}>{struggleLabel}</p>
-            <p className={styles.detailText}>{current.struggle}</p>
-            <p className={styles.detailLabel}>{supportLabel}</p>
-            <p className={styles.detailText}>{current.support}</p>
-          </div>
-        </article>
-      )}
+      {/* Every explanation is in the HTML from the start, so search engines
+          and find-in-page see it; only the active one is shown. */}
+      {items.map((item, i) => {
+        const titleId = `${id}-title-${i}`;
+        return (
+          <article
+            key={item.title}
+            ref={(el) => {
+              detailRefs.current[i] = el;
+            }}
+            className={styles.detail}
+            aria-labelledby={titleId}
+            hidden={active !== i}
+          >
+            <div
+              ref={(el) => {
+                contentRefs.current[i] = el;
+              }}
+              className={styles.detailContent}
+            >
+              <button
+                ref={(el) => {
+                  backRefs.current[i] = el;
+                }}
+                type="button"
+                className={styles.link}
+                onClick={() => void close()}
+              >
+                <span aria-hidden="true">← </span>
+                {backLabel}
+              </button>
+              <h3 id={titleId} className={styles.detailTitle}>
+                {item.title}
+              </h3>
+              <p className={styles.detailLabel}>{struggleLabel}</p>
+              <p className={styles.detailText}>{item.struggle}</p>
+              <p className={styles.detailLabel}>{supportLabel}</p>
+              <p className={styles.detailText}>{item.support}</p>
+            </div>
+          </article>
+        );
+      })}
     </div>
   );
 }
