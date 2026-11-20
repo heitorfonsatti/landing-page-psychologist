@@ -1,0 +1,5 @@
+# Cloudflare Pages headers. The share image is generated without a file
+# extension (src/app/opengraph-image.tsx), so its type is set here; without
+# it the image would be served as a download and share previews would drop it.
+/opengraph-image
+  Content-Type: image/png

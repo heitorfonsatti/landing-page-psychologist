@@ -35,7 +35,8 @@ export function WhatsAppButton({ label, variant = 'primary', className }: Props)
       rel="noopener noreferrer"
     >
       <WhatsAppIcon />
-      {label ?? siteContent.whatsappCta}
+      {/* Wrapped so a narrow layout can hide it visually and keep the name. */}
+      <span className="label">{label ?? siteContent.whatsappCta}</span>
     </a>
   );
 }

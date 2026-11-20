@@ -54,10 +54,11 @@
   grid-area: nav;
 }
 
+/* Mobile: the links spread over one row and never wrap to a third one. */
 .list {
   display: flex;
-  flex-wrap: wrap;
-  gap: 1.25rem;
+  justify-content: space-between;
+  gap: 0.5rem;
   margin: 0;
   padding: 0;
   list-style: none;
@@ -77,6 +78,26 @@
   text-decoration-color: currentColor;
 }
 
+/* Very narrow phones (under 360px): the button keeps only the WhatsApp icon,
+   so the name stays on one line. The label stays as the accessible name. */
+@media (max-width: 22.49rem) {
+  .button {
+    width: 2.75rem;
+    height: 2.75rem;
+    padding: 0;
+  }
+
+  .button :global(.label) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+}
+
 /* Desktop: everything on one row. */
 @media (min-width: 48rem) {
   .inner {
@@ -87,6 +108,7 @@
   }
 
   .list {
+    justify-content: flex-start;
     gap: 2rem;
   }
 
