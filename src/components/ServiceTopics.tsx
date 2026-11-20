@@ -6,7 +6,11 @@ import type { ServiceItem } from '@/types/content';
 import { isFullyVisible, scrollToShow } from './PanelStack';
 import styles from './Services.module.css';
 
+/** `cards`: a grid of tinted cards. `list`: rows divided by rules, with an arrow. */
+export type TopicsLayout = 'cards' | 'list';
+
 type Props = {
+  layout?: TopicsLayout;
   moreLabel: string;
   backLabel: string;
   struggleLabel: string;
@@ -52,6 +56,15 @@ function finished(animations: Animation[]): Promise<unknown> {
   return Promise.all(animations.map((a) => a.finished));
 }
 
+/**
+ * Layout height of `el`, in px, with subpixels. Unlike offsetHeight it is not
+ * rounded, and unlike getBoundingClientRect it ignores the depth `scale` a
+ * partly covered panel carries.
+ */
+function layoutHeight(el: HTMLElement): number {
+  return parseFloat(window.getComputedStyle(el).height) || el.offsetHeight;
+}
+
 /** Box of `el` relative to `frame`, in px. */
 function boxIn(frame: HTMLElement, el: HTMLElement): Box {
   const f = frame.getBoundingClientRect();
@@ -68,7 +81,15 @@ function boxIn(frame: HTMLElement, el: HTMLElement): Box {
  * instantly. Focus moves to "Back" on open and returns to the "Learn more"
  * that was used on close.
  */
-export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabel, items }: Props) {
+export function ServiceTopics({
+  layout = 'cards',
+  moreLabel,
+  backLabel,
+  struggleLabel,
+  supportLabel,
+  items,
+}: Props) {
+  const rows = layout === 'list';
   const id = useId();
 
   /** Topic whose explanation is rendered (also while it grows or shrinks). */
@@ -92,14 +113,25 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
     }
     busy.current = true;
 
+    // List layout: the explanation is at least as tall as the list it
+    // replaces, so the frame keeps its height. Otherwise the photo beside it,
+    // which stretches to the frame, would shrink, and the whole panel would
+    // get shorter, making the stack jump and the next panel peek in.
+    if (rows) {
+      const detail = detailRefs.current[index];
+      if (detail) {
+        detail.style.minHeight = `${layoutHeight(frame)}px`;
+      }
+    }
+
     if (canAnimate(frame)) {
-      const gridHeight = frame.offsetHeight;
+      const gridHeight = layoutHeight(frame);
       const from = boxIn(frame, card);
       // Renders the explanation, still absolutely positioned over the grid.
       flushSync(() => setActive(index));
       const detail = detailRefs.current[index]!;
       const content = contentRefs.current[index]!;
-      const to: Box = { top: 0, left: 0, width: frame.clientWidth, height: detail.offsetHeight };
+      const to: Box = { top: 0, left: 0, width: frame.clientWidth, height: layoutHeight(detail) };
 
       // Starts scrolling while it grows, aiming at the frame's final size, so
       // the next panel never covers the explanation on its way open.
@@ -170,13 +202,13 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
     busy.current = true;
 
     if (canAnimate(frame)) {
-      const detailHeight = frame.offsetHeight;
-      const from: Box = { top: 0, left: 0, width: frame.clientWidth, height: detail.offsetHeight };
+      const detailHeight = layoutHeight(frame);
+      const from: Box = { top: 0, left: 0, width: frame.clientWidth, height: layoutHeight(detail) };
       await finished([content.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: EASE, fill: 'forwards' })]);
 
       // Lays the grid out again underneath the explanation to find where the card goes.
       flushSync(() => setExpanded(false));
-      const gridHeight = frame.offsetHeight;
+      const gridHeight = layoutHeight(frame);
       const to = boxIn(frame, card);
       card.style.visibility = 'hidden';
       const others = cardRefs.current.filter((c): c is HTMLLIElement => c !== null && c !== card);
@@ -205,6 +237,8 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
       setExpanded(false);
       setActive(null);
     });
+    // Measured again on the next open: the list's height changes with the width.
+    detail.style.minHeight = '';
     reveal(card);
     moreRefs.current[index]?.focus({ preventScroll: true });
     busy.current = false;
@@ -212,14 +246,14 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
 
   return (
     <div ref={frameRef} className={styles.frame} data-expanded={expanded || undefined}>
-      <ul className={styles.list} hidden={expanded}>
+      <ul className={rows ? styles.rows : styles.list} hidden={expanded}>
         {items.map((item, i) => (
           <li
             key={item.title}
             ref={(el) => {
               cardRefs.current[i] = el;
             }}
-            className={styles.item}
+            className={rows ? styles.row : styles.item}
           >
             <h3 className={styles.itemTitle}>{item.title}</h3>
             <p className={styles.itemText}>{item.description}</p>
@@ -228,12 +262,23 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
                 moreRefs.current[i] = el;
               }}
               type="button"
-              className={`${styles.link} ${styles.more}`}
+              className={rows ? `${styles.rowMore} ${styles.more}` : `${styles.link} ${styles.more}`}
               onClick={() => void open(i)}
             >
-              {moreLabel}{' '}
-              <span className="visually-hidden">sobre {item.title}</span>
-              <span aria-hidden="true"> →</span>
+              {/* Rows show only the arrow; the label stays as the button's name. */}
+              {rows ? (
+                <span className="visually-hidden">
+                  {moreLabel} sobre {item.title}
+                </span>
+              ) : (
+                <>
+                  {moreLabel}{' '}
+                  <span className="visually-hidden">sobre {item.title}</span>
+                </>
+              )}
+              <span aria-hidden="true" className={styles.arrow}>
+                {rows ? '→' : ' →'}
+              </span>
             </button>
           </li>
         ))}

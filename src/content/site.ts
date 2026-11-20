@@ -107,6 +107,12 @@ export const siteContent: SiteContent = {
       intro:
         'Atendo crianças a partir de 6 anos e adolescentes presencialmente, no consultório. Os pais ou responsáveis participam do processo, com encontros periódicos de orientação.',
       struggleLabel: 'O que você pode estar percebendo',
+      photo: {
+        src: '/images/office.png',
+        alt: 'Consultório com tapete, mesa baixa, brinquedos e livros infantis em uma estante',
+        width: 800,
+        height: 600,
+      },
       items: [
         {
           title: 'Medos, ansiedade e insegurança',

@@ -150,3 +150,122 @@
     grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
+
+/* ---------------------------------------------------------------
+   List layout (children): heading and photo on one side, the topics as
+   rows divided by rules on the other. Stacked on phones.
+   --------------------------------------------------------------- */
+
+.split {
+  display: grid;
+  grid-template-areas:
+    "heading"
+    "photo"
+    "topics";
+  column-gap: clamp(2.5rem, 6vw, 5rem);
+}
+
+.split .heading {
+  grid-area: heading;
+}
+
+.photo {
+  grid-area: photo;
+  margin-bottom: 2rem;
+}
+
+.photo img {
+  width: 100%;
+  /* Low on phones, so the topics are not pushed a full screen down. */
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+  border-radius: var(--radius-large);
+}
+
+.topics {
+  grid-area: topics;
+  min-width: 0;
+}
+
+.rows {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+}
+
+.row {
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  column-gap: 1.5rem;
+  align-items: center;
+  padding: 1rem 0.75rem;
+  border-bottom: 1px solid color-mix(in srgb, var(--ink) 25%, transparent);
+  transition: background-color 200ms ease;
+}
+
+.row .itemTitle {
+  grid-column: 1;
+  margin-bottom: 0.25rem;
+}
+
+.row .itemText {
+  grid-column: 1;
+  margin: 0;
+  max-width: 52ch;
+}
+
+/* Only the arrow shows; the stretched layer (.more) makes the whole row the button. */
+.rowMore {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  padding: 0.5rem;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  font-size: 1.375rem;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.arrow {
+  display: inline-block;
+  transition: translate 200ms ease;
+}
+
+/* The row tints and its arrow steps forward under the pointer. */
+@media (hover: hover) {
+  .row:hover {
+    background-color: color-mix(in srgb, var(--ink) 6%, transparent);
+  }
+
+  .row:hover .arrow {
+    translate: 0.25rem 0;
+  }
+}
+
+@media (min-width: 64rem) {
+  .split {
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.15fr);
+    grid-template-rows: auto 1fr;
+    grid-template-areas:
+      "heading topics"
+      "photo   topics";
+    align-items: start;
+  }
+
+  /* The photo fills the column down to the last row, so both sides end
+     on the same line. */
+  .photo {
+    align-self: stretch;
+    min-height: 16rem;
+    margin-bottom: 0;
+  }
+
+  .photo img {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+}

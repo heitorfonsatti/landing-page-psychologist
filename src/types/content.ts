@@ -18,6 +18,8 @@ export type ServiceGroup = {
   /** Label above `struggle`; changes with who reads it (the patient or the parents). */
   struggleLabel: string;
   items: ServiceItem[];
+  /** Optional photo beside the topics (used by the list layout). */
+  photo?: Photo;
 };
 export type FaqItem = { question: string; answer: string };
 
