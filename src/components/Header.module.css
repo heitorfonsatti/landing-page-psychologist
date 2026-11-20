@@ -64,18 +64,19 @@
   list-style: none;
 }
 
+/* The underline draws in from the left on hover and keyboard focus. */
 .link {
+  padding-bottom: 0.125rem;
   font-size: 0.9375rem;
   text-decoration: none;
   color: var(--brown);
-  text-underline-offset: 0.25em;
-  transition: text-decoration-color 180ms ease;
-  text-decoration: underline;
-  text-decoration-color: transparent;
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 240ms cubic-bezier(0.22, 0.8, 0.24, 1);
 }
 
-.link:hover {
-  text-decoration-color: currentColor;
+.link:hover,
+.link:focus-visible {
+  background-size: 100% 1px;
 }
 
 /* Very narrow phones (under 360px): the button keeps only the WhatsApp icon,

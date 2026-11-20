@@ -40,11 +40,37 @@
 }
 
 .item {
+  position: relative;
   display: flex;
   flex-direction: column;
   padding: 1.75rem;
   background-color: color-mix(in srgb, var(--ink) 10%, transparent);
   border-radius: var(--radius);
+  transition:
+    translate 200ms ease,
+    background-color 200ms ease;
+}
+
+/* The whole card opens its topic: the "learn more" button stretches an
+   invisible layer over it. Keyboard and screen readers still meet one button. */
+.more::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+}
+
+/* Lifts a little and deepens its tint under the pointer. Uses `translate`,
+   so it never fights the `transform` of the open/close animation. */
+@media (hover: hover) {
+  .item:hover {
+    translate: 0 -2px;
+    background-color: color-mix(in srgb, var(--ink) 14%, transparent);
+  }
+
+  .item:hover .more {
+    border-bottom-color: var(--ink);
+  }
 }
 
 .itemTitle {

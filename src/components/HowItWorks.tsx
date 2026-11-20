@@ -12,7 +12,8 @@ export function HowItWorks() {
         {/* The large numbers are decorative (CSS counter, blue on beige,
             3.92:1, allowed for large text only). The order is carried by
             the <ol>, not by the drawn number. */}
-        <ol className={styles.list}>
+        {/* data-draw: the line joining the steps draws once when seen (DrawWhenSeen). */}
+        <ol className={styles.list} data-draw>
           {steps.map((step) => (
             <li key={step.title} className={styles.step}>
               <h3 className={styles.stepTitle}>{step.title}</h3>

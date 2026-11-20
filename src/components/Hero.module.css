@@ -56,6 +56,45 @@
   border-radius: var(--radius-large);
 }
 
+/* Entrance, once on load: the text rises in line by line, then the portrait
+   settles. Pure CSS, so it needs no JavaScript; the global reduced-motion rule
+   turns it off and everything simply shows. `backwards` only holds the start
+   frame during the delay, so once done the animation leaves the button free
+   for its own hover and press. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    translate: 0 0.75rem;
+  }
+}
+
+@keyframes settle {
+  from {
+    opacity: 0;
+    scale: 1.03;
+  }
+}
+
+.text > * {
+  animation: rise 700ms cubic-bezier(0.22, 0.8, 0.24, 1) backwards;
+}
+
+.text > :nth-child(2) {
+  animation-delay: 90ms;
+}
+
+.text > :nth-child(3) {
+  animation-delay: 180ms;
+}
+
+.text > :nth-child(4) {
+  animation-delay: 270ms;
+}
+
+.portrait {
+  animation: settle 1000ms cubic-bezier(0.22, 0.8, 0.24, 1) 150ms backwards;
+}
+
 @media (min-width: 48rem) {
   .inner {
     grid-template-columns: 1fr minmax(0, 0.85fr);

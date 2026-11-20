@@ -228,7 +228,7 @@ export function ServiceTopics({ moreLabel, backLabel, struggleLabel, supportLabe
                 moreRefs.current[i] = el;
               }}
               type="button"
-              className={styles.link}
+              className={`${styles.link} ${styles.more}`}
               onClick={() => void open(i)}
             >
               {moreLabel}{' '}

@@ -1,4 +1,5 @@
 import { About } from '@/components/About';
+import { DrawWhenSeen } from '@/components/DrawWhenSeen';
 import { Faq } from '@/components/Faq';
 import { FinalCta } from '@/components/FinalCta';
 import { Footer } from '@/components/Footer';
@@ -30,6 +31,7 @@ export default function Home() {
       </main>
       <Footer />
       <PanelStack />
+      <DrawWhenSeen />
     </>
   );
 }
