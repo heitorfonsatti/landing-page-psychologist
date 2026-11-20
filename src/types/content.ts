@@ -22,6 +22,20 @@ export type ServiceGroup = {
   photo?: Photo;
 };
 export type FaqItem = { question: string; answer: string };
+/** The office address, shown in the footer beside the street map. */
+export type Office = {
+  heading: string;
+  /** Name of the clinic the office is in, as its sign reads. */
+  place: string;
+  /** Street and number, as the address is written: "Rua Pombas, 212". */
+  street: string;
+  district: string;
+  city: string;
+  /** Two-letter state code. */
+  state: string;
+  /** Who is seen there in person. */
+  note: string;
+};
 
 export type SiteContent = {
   fullName: string;
@@ -53,5 +67,6 @@ export type SiteContent = {
   faq: { title: string; items: FaqItem[] };
   finalCta: { headline: string };
   footer: { privacyNotice: string; emergencyNotice: string };
+  office: Office;
   socialLinks: SocialLink[];
 };

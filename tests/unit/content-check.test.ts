@@ -72,6 +72,15 @@ const validContent: SiteContent = {
     privacyNotice: 'Este site não usa cookies de rastreamento e não tem formulários.',
     emergencyNotice: 'Este site não atende emergências. Ligue 188 (CVV) ou 192 (SAMU).',
   },
+  office: {
+    heading: 'Consultório',
+    place: 'Clínica Exemplo',
+    street: 'Rua Exemplo, 100',
+    district: 'Centro',
+    city: 'Cidade',
+    state: 'PR',
+    note: 'Atendimento presencial.',
+  },
   socialLinks: [{ label: 'Instagram', url: 'https://www.instagram.com/exemplo' }],
 };
 

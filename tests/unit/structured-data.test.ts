@@ -24,8 +24,19 @@ describe('buildStructuredData', () => {
     expect(data.knowsAbout).toHaveLength(adults.items.length + children.items.length);
   });
 
-  it('carries no address, since the office location is not published', () => {
-    expect(data).not.toHaveProperty('address');
+  it('gives the office as the work location, with the address the footer shows', () => {
+    const { office } = siteContent;
+    expect(data.workLocation).toEqual({
+      '@type': 'Place',
+      name: office.place,
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: office.street,
+        addressLocality: office.city,
+        addressRegion: office.state,
+        addressCountry: 'BR',
+      },
+    });
   });
 });
 
