@@ -18,15 +18,23 @@ type Props = {
   items: ServiceItem[];
 };
 
-const EASE = 'cubic-bezier(.22,.8,.24,1)';
-const GROW_MS = 620;
-const SHRINK_MS = 560;
+/* Balanced in and out: a long decelerating tail reads as lag. */
+const EASE = 'cubic-bezier(.4,0,.2,1)';
+const GROW_MS = 440;
+const SHRINK_MS = 380;
 const REDUCED_MOTION_QUERY = '(prefers-reduced-motion: reduce)';
 
 type Box = { top: number; left: number; width: number; height: number };
 
-function boxStyle({ top, left, width, height }: Box): Keyframe {
-  return { top: `${top}px`, left: `${left}px`, width: `${width}px`, height: `${height}px` };
+/**
+ * `clip-path` that shows only `box` of an element `width` x `height` px,
+ * with rounded corners. Animating it repaints but never lays out again, and
+ * the text inside keeps its final line breaks while the shape grows.
+ */
+function clipTo({ top, left, width, height }: Box, outerWidth: number, outerHeight: number, radius: string): Keyframe {
+  const right = outerWidth - left - width;
+  const bottom = outerHeight - top - height;
+  return { clipPath: `inset(${top}px ${right}px ${bottom}px ${left}px round ${radius})` };
 }
 
 /** Animations only run when the browser supports them and motion is welcome. */
@@ -65,11 +73,34 @@ function layoutHeight(el: HTMLElement): number {
   return parseFloat(window.getComputedStyle(el).height) || el.offsetHeight;
 }
 
-/** Box of `el` relative to `frame`, in px. */
+/**
+ * Box of `el` relative to `frame`, in layout px. Screen rects are divided by
+ * the frame's scale, which is not 1 while the panel is partly covered.
+ */
 function boxIn(frame: HTMLElement, el: HTMLElement): Box {
   const f = frame.getBoundingClientRect();
   const r = el.getBoundingClientRect();
-  return { top: r.top - f.top, left: r.left - f.left, width: r.width, height: r.height };
+  const scale = frame.offsetWidth > 0 ? f.width / frame.offsetWidth : 1;
+  return {
+    top: (r.top - f.top) / scale,
+    left: (r.left - f.left) / scale,
+    width: r.width / scale,
+    height: r.height / scale,
+  };
+}
+
+/** Fades and slightly shrinks the cards that make way, or brings them back. */
+function fadeCards(cards: HTMLElement[], direction: 'out' | 'in', delay = 0): Animation[] {
+  const shown = { opacity: 1, transform: 'scale(1)' };
+  const gone = { opacity: 0, transform: 'scale(.97)' };
+  return cards.map((c) =>
+    c.animate(direction === 'out' ? [shown, gone] : [gone, shown], {
+      duration: direction === 'out' ? 200 : 260,
+      delay,
+      easing: EASE,
+      fill: direction === 'out' ? 'forwards' : 'backwards',
+    }),
+  );
 }
 
 /**
@@ -127,45 +158,54 @@ export function ServiceTopics({
     if (canAnimate(frame)) {
       const gridHeight = layoutHeight(frame);
       const from = boxIn(frame, card);
-      // Renders the explanation, still absolutely positioned over the grid.
+      // Renders the explanation at its final size, absolutely positioned over
+      // the grid; the clip then reveals it from the card's shape outward.
       flushSync(() => setActive(index));
       const detail = detailRefs.current[index]!;
       const content = contentRefs.current[index]!;
-      const to: Box = { top: 0, left: 0, width: frame.clientWidth, height: layoutHeight(detail) };
+      const width = frame.clientWidth;
+      const height = layoutHeight(detail);
+      // Tall enough to hold the card's box too: a low card can sit below the
+      // explanation's final bottom, and the clip starts there.
+      const canvas = Math.max(height, from.top + from.height);
+      detail.style.height = `${canvas}px`;
+      const radius = window.getComputedStyle(detail).borderTopLeftRadius || '0px';
+      const to: Box = { top: 0, left: 0, width, height };
 
       // Starts scrolling while it grows, aiming at the frame's final size, so
       // the next panel never covers the explanation on its way open.
-      frame.style.height = `${to.height}px`;
+      frame.style.height = `${height}px`;
       reveal(frame);
       frame.style.height = '';
 
       card.style.visibility = 'hidden';
       const others = cardRefs.current.filter((c): c is HTMLLIElement => c !== null && c !== card);
       await finished([
-        ...others.map((c) =>
-          c.animate(
-            [
-              { opacity: 1, transform: 'scale(1)' },
-              { opacity: 0, transform: 'scale(.94)' },
-            ],
-            { duration: 320, easing: EASE, fill: 'forwards' },
-          ),
-        ),
-        // `forwards` holds the final size until the explanation takes the
+        ...fadeCards(others, 'out'),
+        // `forwards` holds the final state until the explanation takes the
         // cards' place in the flow; without it, the frame would flash back to
-        // the grid's height while the text is still fading in.
-        detail.animate([boxStyle(from), boxStyle(to)], { duration: GROW_MS, easing: EASE, fill: 'forwards' }),
-        frame.animate([{ height: `${gridHeight}px` }, { height: `${to.height}px` }], {
+        // the grid's height for a frame.
+        detail.animate([clipTo(from, width, canvas, radius), clipTo(to, width, canvas, radius)], {
           duration: GROW_MS,
           easing: EASE,
           fill: 'forwards',
         }),
+        frame.animate([{ height: `${gridHeight}px` }, { height: `${height}px` }], {
+          duration: GROW_MS,
+          easing: EASE,
+          fill: 'forwards',
+        }),
+        // The text already sits at its final line breaks, so it can come in
+        // while the shape is still growing instead of after it. A row is
+        // already full width, so its text shows almost at once; a card grows
+        // sideways too, so its text waits until the shape is nearly wide
+        // enough not to cut words at the edges. Both end with the growth.
         content.animate(
           [
-            { opacity: 0, transform: 'translateY(8px)' },
+            { opacity: 0, transform: 'translateY(6px)' },
             { opacity: 1, transform: 'none' },
           ],
-          { duration: 320, delay: 380, easing: EASE, fill: 'backwards' },
+          { duration: rows ? 300 : 220, delay: rows ? 90 : 220, easing: EASE, fill: 'backwards' },
         ),
       ]);
       others.forEach((c) => c.getAnimations().forEach((a) => a.cancel()));
@@ -179,6 +219,7 @@ export function ServiceTopics({
     if (typeof frame.getAnimations === 'function') {
       frame.getAnimations({ subtree: true }).forEach((a) => a.cancel());
     }
+    detailRefs.current[index]?.style.removeProperty('height');
     reveal(frame);
     backRefs.current[index]?.focus({ preventScroll: true });
     busy.current = false;
@@ -203,31 +244,35 @@ export function ServiceTopics({
 
     if (canAnimate(frame)) {
       const detailHeight = layoutHeight(frame);
-      const from: Box = { top: 0, left: 0, width: frame.clientWidth, height: layoutHeight(detail) };
-      await finished([content.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 160, easing: EASE, fill: 'forwards' })]);
+      const width = frame.clientWidth;
+      const height = layoutHeight(detail);
+      const radius = window.getComputedStyle(detail).borderTopLeftRadius || '0px';
 
-      // Lays the grid out again underneath the explanation to find where the card goes.
+      // Lays the grid out again underneath the explanation to find where the
+      // card goes. Everything below then runs at once: no pause between the
+      // text fading and the shape shrinking.
       flushSync(() => setExpanded(false));
       const gridHeight = layoutHeight(frame);
       const to = boxIn(frame, card);
+      const canvas = Math.max(height, to.top + to.height);
+      detail.style.height = `${canvas}px`;
+      const from: Box = { top: 0, left: 0, width, height };
       card.style.visibility = 'hidden';
       const others = cardRefs.current.filter((c): c is HTMLLIElement => c !== null && c !== card);
 
       await finished([
-        detail.animate([boxStyle(from), boxStyle(to)], { duration: SHRINK_MS, easing: EASE, fill: 'forwards' }),
+        // Quick, so the shrinking shape does not cut words for long.
+        content.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 110, easing: EASE, fill: 'forwards' }),
+        detail.animate([clipTo(from, width, canvas, radius), clipTo(to, width, canvas, radius)], {
+          duration: SHRINK_MS,
+          easing: EASE,
+          fill: 'forwards',
+        }),
         frame.animate([{ height: `${detailHeight}px` }, { height: `${gridHeight}px` }], {
           duration: SHRINK_MS,
           easing: EASE,
         }),
-        ...others.map((c) =>
-          c.animate(
-            [
-              { opacity: 0, transform: 'scale(.94)' },
-              { opacity: 1, transform: 'scale(1)' },
-            ],
-            { duration: 360, delay: 260, easing: EASE, fill: 'backwards' },
-          ),
-        ),
+        ...fadeCards(others, 'in', 120),
       ]);
       others.forEach((c) => c.getAnimations().forEach((a) => a.cancel()));
       card.style.visibility = '';
@@ -237,7 +282,13 @@ export function ServiceTopics({
       setExpanded(false);
       setActive(null);
     });
-    // Measured again on the next open: the list's height changes with the width.
+    // Leaves the hidden explanation clean for the next open: no held clip or
+    // fade, no animation canvas, and the list height measured again (it
+    // changes with the width).
+    if (typeof detail.getAnimations === 'function') {
+      detail.getAnimations({ subtree: true }).forEach((a) => a.cancel());
+    }
+    detail.style.removeProperty('height');
     detail.style.minHeight = '';
     reveal(card);
     moreRefs.current[index]?.focus({ preventScroll: true });
